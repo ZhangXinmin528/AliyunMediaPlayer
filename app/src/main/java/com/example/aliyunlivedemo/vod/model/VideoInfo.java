@@ -50,7 +50,7 @@ public class VideoInfo implements Serializable {
 
     @Override
     public String toString() {
-        return "VideoInfo{" +
+        return "VideoEntity{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +

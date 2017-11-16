@@ -19,8 +19,8 @@ import java.util.Map;
  *
  * @author zhangxinmin
  */
-public final class AliPlayerBuilder {
-    private static final String TAG = AliPlayerBuilder.class.getSimpleName();
+public final class _AliPlayerBuilder {
+    private static final String TAG = _AliPlayerBuilder.class.getSimpleName();
 
     //出错状态
     public static final int STATE_ERROR = -1;
@@ -37,8 +37,7 @@ public final class AliPlayerBuilder {
     //视频播放完成
     public static final int STATE_PLAYBACK_COMPLETED = 5;
 
-    //AliVcMediaPlayer
-    private AliVcMediaPlayer mAliVcMediaPlayer;
+    private Context mContext;
     // 当前状态
     private int curState = STATE_IDLE;
     // 当前缓冲进度
@@ -49,16 +48,15 @@ public final class AliPlayerBuilder {
     private OnPlayerCallback onPlayerCallback;
     // 播放视频承载的view
     private SurfaceHolder surfaceHolder;
-
-    private Context mContext;
+    //AliVcMediaPlayer
+    private AliVcMediaPlayer mAliVcMediaPlayer;
     private SurfaceView mSurfaceView;
     private SimpleDateFormat mSimpleDateFormat;
 
-    public AliPlayerBuilder(Context context, SurfaceView view) {
+    public _AliPlayerBuilder(Context context, SurfaceView view) {
         this.mContext = context;
         this.mSurfaceView = view;
         initParams();
-
     }
 
     //init params
@@ -176,12 +174,14 @@ public final class AliPlayerBuilder {
 
     }
 
+    //======================================播放器相关设置============================================
+
     /**
      * 开始播放视频
      */
     public void _startPlayVideo() {
         if (surfaceHolder != null) {
-            if (TextUtils.isEmpty(mUrl)) {
+            if (!TextUtils.isEmpty(mUrl) && mAliVcMediaPlayer != null) {
                 try {
                     mAliVcMediaPlayer.prepareAndPlay(mUrl);
                     setCurrentState(STATE_PREPARING);
@@ -238,7 +238,7 @@ public final class AliPlayerBuilder {
     /**
      * 销毁
      */
-    public void _destory() {
+    public void _destoryPlayer() {
         if (mAliVcMediaPlayer != null) {
             mAliVcMediaPlayer.stop();
             mAliVcMediaPlayer.releaseVideoSurface();
@@ -260,6 +260,8 @@ public final class AliPlayerBuilder {
             setCurrentState(STATE_IDLE);
         }
     }
+
+    //==============================================================================================
 
     /**
      * 设置当前播放状态
@@ -320,7 +322,6 @@ public final class AliPlayerBuilder {
         if (isInPlaybackState()) {
             return mAliVcMediaPlayer.getDuration();
         }
-
         return -1;
     }
 
@@ -336,12 +337,12 @@ public final class AliPlayerBuilder {
         return 0;
     }
 
-    public AliVcMediaPlayer getmAliVcMediaPlayer() {
+    public AliVcMediaPlayer getMediaPlayer() {
         return mAliVcMediaPlayer;
     }
 
-    public void setmAliVcMediaPlayer(AliVcMediaPlayer mAliVcMediaPlayer) {
-        this.mAliVcMediaPlayer = mAliVcMediaPlayer;
+    public void setMediaPlayer(AliVcMediaPlayer aliVcMediaPlayer) {
+        this.mAliVcMediaPlayer = aliVcMediaPlayer;
     }
 
     public int getCurState() {
@@ -373,15 +374,21 @@ public final class AliPlayerBuilder {
      *
      * @param url
      */
-    public void setmUrl(String url) {
-        this.mUrl = url;
-//        _startPlayVideo();
+    public void setUrl(String url) {
+        if (!TextUtils.isEmpty(url)){
+            this.mUrl = url;
+        }
     }
 
     public OnPlayerCallback getOnPlayerCallback() {
         return onPlayerCallback;
     }
 
+    /**
+     * 设置播放监听
+     *
+     * @param onPlayerCallback
+     */
     public void setOnPlayerCallback(OnPlayerCallback onPlayerCallback) {
         this.onPlayerCallback = onPlayerCallback;
     }
@@ -390,13 +397,38 @@ public final class AliPlayerBuilder {
         return surfaceHolder;
     }
 
-    public void setSurfaceHolder(SurfaceHolder surfaceHolder) {
+    /**
+     * 为AliVcMediaPlayer设置SurfaceHolder
+     *
+     * @param surfaceHolder
+     */
+    public void _setSurfaceHolder(SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
-        mAliVcMediaPlayer.setVideoSurface(surfaceHolder.getSurface());
+        Log.e(TAG, "SurfaceView..surfaceCreated");
+        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
+        surfaceHolder.setKeepScreenOn(true);
+
+        //前后台切换需要重新设置Surface;部分手机锁屏也会做前后台切换
+        if (mAliVcMediaPlayer != null) {
+            mAliVcMediaPlayer.setVideoSurface(surfaceHolder.getSurface());
+        }
     }
 
-    public void setSurfaceChanged() {
-        mAliVcMediaPlayer.setSurfaceChanged();
+    /**
+     * AliVcMediaPlayer设置setSurfaceChanged
+     */
+    public void _setSurfaceChanged() {
+        Log.e(TAG, "SurfaceView..surfaceChanged");
+        if (mAliVcMediaPlayer != null) {
+            mAliVcMediaPlayer.setSurfaceChanged();
+        }
+    }
+
+    /**
+     * @param holder
+     */
+    public void _setSurfaceDestroyed(SurfaceHolder holder) {
+        Log.e(TAG, "SurfaceView..surfaceDestroyed");
     }
 
     /**

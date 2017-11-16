@@ -114,7 +114,8 @@ public class VideoBehaviorView extends FrameLayout implements GestureDetector.On
 
     /**
      * e1是
-     * @param e1 按下时的位置
+     *
+     * @param e1        按下时的位置
      * @param e2
      * @param distanceX
      * @param distanceY

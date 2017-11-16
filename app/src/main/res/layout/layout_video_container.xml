@@ -4,14 +4,14 @@
     android:layout_height="match_parent">
 
     <SurfaceView
-        android:id="@+id/video_surface"
+        android:id="@+id/surfaceview_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <com.example.aliyunlivedemo.mAliVcMediaPlayer.view.VideoControllerView
         android:id="@+id/video_controller"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <include
         android:id="@+id/video_loading"
@@ -22,13 +22,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <com.example.aliyunlivedemo.mAliVcMediaPlayer.view.VideoProgressOverlay
         android:id="@+id/video_progress_overlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.example.aliyunlivedemo.player.view;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aliyunlivedemo.R;
-import com.example.aliyunlivedemo.player.bean.IVideoInfo;
+import com.example.aliyunlivedemo.player.bean.IVideoEntity;
 import com.example.aliyunlivedemo.player.listener.OnJsVideoControlListener;
 import com.example.aliyunlivedemo.player.listener.OnVideoControlListener;
-import com.example.aliyunlivedemo.player.video.AliPlayerBuilder;
+import com.example.aliyunlivedemo.player.video._AliPlayerBuilder;
 import com.example.aliyunlivedemo.util.DisplayUtils;
 import com.example.aliyunlivedemo.util.NetworkUtils;
 import com.example.aliyunlivedemo.util.StringUtils;
@@ -55,8 +56,8 @@ public class VideoControllerView extends FrameLayout {
     private boolean mDragging;
     private long mDraggingProgress;
 
-    private AliPlayerBuilder mPlayer;
-    private IVideoInfo videoInfo;
+    private _AliPlayerBuilder mPlayer;
+    private IVideoEntity videoInfo;
     private OnVideoControlListener onVideoControlListener;
 
     public void setOnVideoControlListener(OnVideoControlListener onVideoControlListener) {
@@ -160,7 +161,7 @@ public class VideoControllerView extends FrameLayout {
      *
      * @param player
      */
-    public void setMediaPlayer(AliPlayerBuilder player) {
+    public void setMediaPlayer(_AliPlayerBuilder player) {
         mPlayer = player;
         updatePausePlay();
     }
@@ -170,10 +171,11 @@ public class VideoControllerView extends FrameLayout {
      *
      * @param videoInfo
      */
-    public void setVideoInfo(IVideoInfo videoInfo) {
+    public void setVideoInfo(IVideoEntity videoInfo) {
         this.videoInfo = videoInfo;
-        if (videoInfo.getVideoTitle() != null)
-            mVideoTitle.setText(videoInfo.getVideoTitle() + "");
+        String title = videoInfo.getVideoTitle();
+        if (title != null && !TextUtils.isEmpty(title))
+            mVideoTitle.setText(title);
     }
 
     /**
@@ -577,12 +579,13 @@ public class VideoControllerView extends FrameLayout {
 
     /**
      * 控制默认背景隐藏和显示
+     *
      * @param flag
      */
-    public void showBg(boolean flag){
-        if(flag){
+    public void showBg(boolean flag) {
+        if (flag) {
             rl_pre.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             rl_pre.setVisibility(View.GONE);
         }
     }

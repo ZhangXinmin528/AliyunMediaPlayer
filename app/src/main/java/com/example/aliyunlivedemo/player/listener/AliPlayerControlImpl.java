@@ -1,10 +1,12 @@
 package com.example.aliyunlivedemo.player.listener;
 
-public class OnJsVideoControlListener implements OnVideoControlListener {
+/**
+ * 播放器控制器
+ */
+public class AliPlayerControlImpl implements OnAliPlayerControlListener {
 
     @Override
     public void onStartPlay() {
-
     }
 
     @Override

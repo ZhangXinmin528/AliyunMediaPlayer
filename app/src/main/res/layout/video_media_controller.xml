@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:src="@drawable/video_unlock"
+        android:src="@drawable/player_video_unlock"
         android:visibility="gone" />
 
-    <com.alivc.testmediaplayer.jsplayer.view.JsVideoErrorView
+    <com.example.aliyunlivedemo.player.view.VideoErrorView
         android:id="@+id/video_controller_error"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -32,7 +32,7 @@
         android:layout_alignTop="@id/video_controller_title"
         android:padding="12dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_back_white" />
+        android:src="@drawable/ic_player_back_white" />
 
     <RelativeLayout
         android:id="@+id/rl_pre"
@@ -44,7 +44,7 @@
             android:id="@+id/iv_pre_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_video_play"
+            android:src="@drawable/ic_player_video_play"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
 </RelativeLayout>

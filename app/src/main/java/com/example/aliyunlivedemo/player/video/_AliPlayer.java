@@ -19,8 +19,8 @@ import java.util.Map;
  *
  * @author zhangxinmin
  */
-public final class _AliPlayerBuilder {
-    private static final String TAG = _AliPlayerBuilder.class.getSimpleName();
+public final class _AliPlayer {
+    private static final String TAG = _AliPlayer.class.getSimpleName();
 
     //出错状态
     public static final int STATE_ERROR = -1;
@@ -53,7 +53,7 @@ public final class _AliPlayerBuilder {
     private SurfaceView mSurfaceView;
     private SimpleDateFormat mSimpleDateFormat;
 
-    public _AliPlayerBuilder(Context context, SurfaceView view) {
+    public _AliPlayer(Context context, SurfaceView view) {
         this.mContext = context;
         this.mSurfaceView = view;
         initParams();
@@ -117,15 +117,23 @@ public final class _AliPlayerBuilder {
             @Override
             public void onInfo(int what, int extra) {
                 Log.e(TAG, "MediaPlayerInfoListener..视频播放信息：" + what + "..额外信息：" + extra);
+                if (onPlayerCallback != null) {
+                    // 701 加载中
+                    if (what == android.media.MediaPlayer.MEDIA_INFO_BUFFERING_START) {
+                        onPlayerCallback.onLoadingChanged(true);
+                        // 702 加载完成
+                    } else if (what == android.media.MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+                        onPlayerCallback.onLoadingChanged(false);
+                    }
+                }
             }
         });
 
-        // 出错监听
+        //异常错误监听器
         mAliVcMediaPlayer.setErrorListener(new MediaPlayer.MediaPlayerErrorListener() {
             @Override
             public void onError(int i, String msg) {
                 Log.e(TAG, "MediaPlayerErrorListener..播放器错误：" + msg);
-                _stopPlayVideo();//停止播放
                 setCurrentState(STATE_ERROR);
                 if (onPlayerCallback != null) {
                     onPlayerCallback.onError(i, msg);
@@ -153,6 +161,16 @@ public final class _AliPlayerBuilder {
                     onPlayerCallback.onBufferingUpdate(percent);
                 }
                 currentBufferPercentage = percent;
+            }
+        });
+
+        //视频大小改变监听接口
+        mAliVcMediaPlayer.setVideoSizeChangeListener(new MediaPlayer.MediaPlayerVideoSizeChangeListener() {
+            @Override
+            public void onVideoSizeChange(int width, int height) {
+                if (onPlayerCallback != null) {
+                    onPlayerCallback.onVideoSizeChanged(width, height);
+                }
             }
         });
 
@@ -375,7 +393,7 @@ public final class _AliPlayerBuilder {
      * @param url
      */
     public void setUrl(String url) {
-        if (!TextUtils.isEmpty(url)){
+        if (!TextUtils.isEmpty(url)) {
             this.mUrl = url;
         }
     }

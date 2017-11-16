@@ -15,7 +15,7 @@ public interface OnPlayerCallback {
     /**
      * 视频size变化
      */
-    void onVideoSizeChanged(MediaPlayer mp, int width, int height);
+    void onVideoSizeChanged(int width, int height);
 
     /**
      * 缓存更新变化

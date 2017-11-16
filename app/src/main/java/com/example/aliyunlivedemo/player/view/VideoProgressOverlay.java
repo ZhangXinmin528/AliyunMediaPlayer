@@ -75,10 +75,10 @@ public class VideoProgressOverlay extends FrameLayout {
 
         if (delProgress > 0) {
             // 回退
-            mSeekIcon.setImageResource(R.drawable.ic_video_back);
+            mSeekIcon.setImageResource(R.drawable.ic_player_video_back);
         } else {
             // 前进
-            mSeekIcon.setImageResource(R.drawable.ic_video_speed);
+            mSeekIcon.setImageResource(R.drawable.ic_player_video_speed);
         }
         mSeekCurProgress.setText(StringUtils.stringForTime(targetProgress));
         mSeekDuration.setText(StringUtils.stringForTime(mDuration));

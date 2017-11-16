@@ -62,12 +62,12 @@ public class VideoSystemOverlay extends FrameLayout {
     public void show(SystemType type, int max, int progress) {
         if (type == SystemType.BRIGHTNESS) {
             mSystemTitle.setText("亮度");
-            mSystemImage.setImageResource(R.drawable.system_ui_brightness);
+            mSystemImage.setImageResource(R.drawable.player_system_ui_brightness);
         } else if (type == SystemType.VOLUME) {
             mSystemTitle.setText("音量");
             mSystemImage.setImageResource(progress == 0
-                    ? R.drawable.system_ui_no_volume
-                    : R.drawable.system_ui_volume);
+                    ? R.drawable.player_system_ui_no_volume
+                    : R.drawable.player_system_ui_volume);
         }
         mProgressBar.setMax(max);
         mProgressBar.setProgress(progress);

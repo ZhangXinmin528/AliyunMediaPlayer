@@ -35,6 +35,7 @@
         <!--点播-->
         <activity android:name=".vod.VodSortActivity" />
         <activity android:name=".vod.VodActivity" />
+        <activity android:name=".vod.VodActivity2" />
     </application>
 
 </manifest>

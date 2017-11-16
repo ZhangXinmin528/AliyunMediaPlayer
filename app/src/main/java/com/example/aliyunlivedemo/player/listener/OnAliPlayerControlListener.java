@@ -3,7 +3,7 @@ package com.example.aliyunlivedemo.player.listener;
 /**
  * 视频控制监听
  */
-public interface OnVideoControlListener {
+public interface OnAliPlayerControlListener {
 
     /**
      * 开始播放按钮

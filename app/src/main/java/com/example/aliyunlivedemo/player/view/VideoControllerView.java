@@ -16,9 +16,9 @@ import android.widget.Toast;
 
 import com.example.aliyunlivedemo.R;
 import com.example.aliyunlivedemo.player.bean.IVideoEntity;
-import com.example.aliyunlivedemo.player.listener.OnJsVideoControlListener;
-import com.example.aliyunlivedemo.player.listener.OnVideoControlListener;
-import com.example.aliyunlivedemo.player.video._AliPlayerBuilder;
+import com.example.aliyunlivedemo.player.listener.AliPlayerControlImpl;
+import com.example.aliyunlivedemo.player.listener.OnAliPlayerControlListener;
+import com.example.aliyunlivedemo.player.video._AliPlayer;
 import com.example.aliyunlivedemo.util.DisplayUtils;
 import com.example.aliyunlivedemo.util.NetworkUtils;
 import com.example.aliyunlivedemo.util.StringUtils;
@@ -56,12 +56,12 @@ public class VideoControllerView extends FrameLayout {
     private boolean mDragging;
     private long mDraggingProgress;
 
-    private _AliPlayerBuilder mPlayer;
+    private _AliPlayer mPlayer;
     private IVideoEntity videoInfo;
-    private OnVideoControlListener onVideoControlListener;
+    private OnAliPlayerControlListener onAliPlayerControlListener;
 
-    public void setOnVideoControlListener(OnVideoControlListener onVideoControlListener) {
-        this.onVideoControlListener = onVideoControlListener;
+    public void setOnAliPlayerControlListener(OnAliPlayerControlListener onAliPlayerControlListener) {
+        this.onAliPlayerControlListener = onAliPlayerControlListener;
     }
 
     public VideoControllerView(Context context) {
@@ -91,8 +91,8 @@ public class VideoControllerView extends FrameLayout {
         mControllerBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onVideoControlListener != null) {
-                    onVideoControlListener.onBack();
+                if (onAliPlayerControlListener != null) {
+                    onAliPlayerControlListener.onBack();
                 }
             }
         });
@@ -112,23 +112,23 @@ public class VideoControllerView extends FrameLayout {
         iv_pre_play.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onVideoControlListener != null) {
-                    onVideoControlListener.onStartPlay();
+                if (onAliPlayerControlListener != null) {
+                    onAliPlayerControlListener.onStartPlay();
                     rl_pre.setVisibility(View.GONE);
                 }
             }
         });
 
         mVideoPlayState.setOnClickListener(mOnPlayerPauseClick);
-        mVideoPlayState.setImageResource(R.drawable.ic_video_pause);
+        mVideoPlayState.setImageResource(R.drawable.ic_player_video_pause);
         mPlayerSeekBar.setOnSeekBarChangeListener(mSeekListener);
 
 
         mVideoFullScreen.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onVideoControlListener != null) {
-                    onVideoControlListener.onFullScreen();
+                if (onAliPlayerControlListener != null) {
+                    onAliPlayerControlListener.onFullScreen();
                 }
             }
         });
@@ -146,7 +146,7 @@ public class VideoControllerView extends FrameLayout {
 
         // error
         mErrorView = (VideoErrorView) findViewById(R.id.video_controller_error);
-        mErrorView.setOnVideoControlListener(new OnJsVideoControlListener() {
+        mErrorView.setOnAliPlayerControlListener(new AliPlayerControlImpl() {
             @Override
             public void onRetry(int errorStatus) {
                 retry(errorStatus);
@@ -161,7 +161,7 @@ public class VideoControllerView extends FrameLayout {
      *
      * @param player
      */
-    public void setMediaPlayer(_AliPlayerBuilder player) {
+    public void setMediaPlayer(_AliPlayer player) {
         mPlayer = player;
         updatePausePlay();
     }
@@ -294,8 +294,8 @@ public class VideoControllerView extends FrameLayout {
         int duration = mPlayer.getDuration();
         if (mPlayerSeekBar != null) {
             if (duration > 0) {
-                // use long to avoid overflow
-                long pos = 1000L * position / duration;
+                    // use long to avoid overflow
+                    long pos = 1000L * position / duration;
                 mPlayerSeekBar.setProgress((int) pos);
             }
             // 设置缓冲进度
@@ -375,8 +375,8 @@ public class VideoControllerView extends FrameLayout {
         switch (status) {
             case VideoErrorView.STATUS_VIDEO_DETAIL_ERROR:
                 // 传递给activity
-                if (onVideoControlListener != null) {
-                    onVideoControlListener.onRetry(status);
+                if (onAliPlayerControlListener != null) {
+                    onAliPlayerControlListener.onRetry(status);
                 }
                 break;
             case VideoErrorView.STATUS_VIDEO_SRC_ERROR:
@@ -470,7 +470,7 @@ public class VideoControllerView extends FrameLayout {
     private void lock() {
         Log.i("DDD", "lock");
         isScreenLock = true;
-        mScreenLock.setImageResource(R.drawable.video_locked);
+        mScreenLock.setImageResource(R.drawable.player_video_locked);
     }
 
     /**
@@ -479,7 +479,7 @@ public class VideoControllerView extends FrameLayout {
     private void unlock() {
         Log.i("DDD", "unlock");
         isScreenLock = false;
-        mScreenLock.setImageResource(R.drawable.video_unlock);
+        mScreenLock.setImageResource(R.drawable.player_video_unlock);
     }
 
     /**
@@ -519,9 +519,9 @@ public class VideoControllerView extends FrameLayout {
      */
     public void updatePausePlay() {
         if (mPlayer.isPlaying()) {
-            mVideoPlayState.setImageResource(R.drawable.ic_video_pause);
+            mVideoPlayState.setImageResource(R.drawable.ic_player_video_pause);
         } else {
-            mVideoPlayState.setImageResource(R.drawable.ic_video_play);
+            mVideoPlayState.setImageResource(R.drawable.ic_player_video_play);
         }
     }
 

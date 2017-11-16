@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Parcelable;
@@ -24,8 +23,8 @@ import android.widget.FrameLayout;
 import com.example.aliyunlivedemo.R;
 import com.example.aliyunlivedemo.player.bean.IVideoEntity;
 import com.example.aliyunlivedemo.player.bean.VideoEntity;
+import com.example.aliyunlivedemo.player.listener.OnAliPlayerControlListener;
 import com.example.aliyunlivedemo.player.listener.OnPlayerCallback;
-import com.example.aliyunlivedemo.player.listener.OnVideoControlListener;
 import com.example.aliyunlivedemo.player.view.VideoBehaviorView;
 import com.example.aliyunlivedemo.player.view.VideoControllerView;
 import com.example.aliyunlivedemo.player.view.VideoProgressOverlay;
@@ -35,8 +34,8 @@ import com.example.aliyunlivedemo.util.NetworkUtils;
 /**
  * 视频播放器的封装类
  */
-public final class AliPlayerImpl extends VideoBehaviorView {
-    private static final String TAG = AliPlayerImpl.class.getSimpleName();
+public final class AliPlayerView extends VideoBehaviorView {
+    private static final String TAG = AliPlayerView.class.getSimpleName();
 
     private Context mContext;
     private int initWidth;
@@ -48,7 +47,7 @@ public final class AliPlayerImpl extends VideoBehaviorView {
     private VideoControllerView mMediaController;
 
     //阿里云播放器
-    private _AliPlayerBuilder mPlayerBuilder;
+    private _AliPlayer mAliPlayer;
     private String mVideoUrl;//播放地址
 
     private NetChangedReceiver mNetChangedReceiver;
@@ -56,15 +55,15 @@ public final class AliPlayerImpl extends VideoBehaviorView {
     //是否切换到后台暂停
     private boolean isBackgroundPause;
 
-    public AliPlayerImpl(Context context) {
+    public AliPlayerView(Context context) {
         this(context, null, 0);
     }
 
-    public AliPlayerImpl(Context context, AttributeSet attrs) {
+    public AliPlayerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public AliPlayerImpl(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AliPlayerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
@@ -72,41 +71,6 @@ public final class AliPlayerImpl extends VideoBehaviorView {
     private void init(Context context) {
         mContext = context;
 
-        initViews();
-
-        initPlayer();
-        //为SurfaceHolder添加回调
-        mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                initWidth = getWidth();
-                initHeight = getHeight();
-                if (mPlayerBuilder != null) {
-                    mPlayerBuilder._setSurfaceHolder(holder);
-                }
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                if (mPlayerBuilder != null) {
-                    mPlayerBuilder._setSurfaceChanged();
-                }
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                if (mPlayerBuilder != null) {
-                    mPlayerBuilder._setSurfaceDestroyed(holder);
-                }
-            }
-        });
-
-        // 注册网络状态变化广播
-        registerNetChangedReceiver();
-    }
-
-    // init views
-    private void initViews() {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         inflater.inflate(R.layout.layout_video_container, this);
 
@@ -115,24 +79,54 @@ public final class AliPlayerImpl extends VideoBehaviorView {
         mProgressView = (VideoProgressOverlay) findViewById(R.id.video_progress_overlay);
         mSystemView = (VideoSystemOverlay) findViewById(R.id.video_system_overlay);
         mMediaController = (VideoControllerView) findViewById(R.id.video_controller);
+
+        initPlayer();
+
+        //为SurfaceHolder添加回调
+        mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                initWidth = getWidth();
+                initHeight = getHeight();
+                if (mAliPlayer != null) {
+                    mAliPlayer._setSurfaceHolder(holder);
+                }
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+                if (mAliPlayer != null) {
+                    mAliPlayer._setSurfaceChanged();
+                }
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                if (mAliPlayer != null) {
+                    mAliPlayer._setSurfaceDestroyed(holder);
+                }
+            }
+        });
+
+        // 注册网络状态变化广播
+        registerNetChangedReceiver();
     }
 
     private void initPlayer() {
-        mPlayerBuilder = new _AliPlayerBuilder(mContext, mSurfaceView);
+        mAliPlayer = new _AliPlayer(mContext, mSurfaceView);
 
         // todo 这里可以优化，将这些回调全部暴露出去
-
-        mPlayerBuilder.setOnPlayerCallback(new OnPlayerCallback() {
+        mAliPlayer.setOnPlayerCallback(new OnPlayerCallback() {
             @Override
             public void onPrepared() {
                 Log.e(TAG, "onPrepared: ");
-                mPlayerBuilder._resumePlayVideo();
+                mAliPlayer._resumePlayVideo();
                 mMediaController.show();
                 mMediaController.hideErrorView();
             }
 
             @Override
-            public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+            public void onVideoSizeChanged(int width, int height) {
 
             }
 
@@ -160,17 +154,17 @@ public final class AliPlayerImpl extends VideoBehaviorView {
             @Override
             public void onStateChanged(int curState) {
                 switch (curState) {
-                    case _AliPlayerBuilder.STATE_IDLE:
+                    case _AliPlayer.STATE_IDLE:
                         am.abandonAudioFocus(null);
                         break;
-                    case _AliPlayerBuilder.STATE_PREPARING:
+                    case _AliPlayer.STATE_PREPARING:
                         am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
                         break;
                 }
             }
         });
 
-        mMediaController.setMediaPlayer(mPlayerBuilder);
+        mMediaController.setMediaPlayer(mAliPlayer);
     }
 
     /**
@@ -181,7 +175,7 @@ public final class AliPlayerImpl extends VideoBehaviorView {
     public void setVideoUrl(String videoUrl) {
         if (!TextUtils.isEmpty(videoUrl)) {
             mMediaController.setVideoInfo(new VideoEntity(videoUrl));
-            mPlayerBuilder.setUrl(videoUrl);
+            mAliPlayer.setUrl(videoUrl);
         }
     }
 
@@ -192,7 +186,7 @@ public final class AliPlayerImpl extends VideoBehaviorView {
      */
     public void setVideoEntity(@Nullable IVideoEntity entity) {
         mMediaController.setVideoInfo(entity);
-        mPlayerBuilder.setUrl(entity.getVideoPath());
+        mAliPlayer.setUrl(entity.getVideoPath());
     }
 
     /**
@@ -204,8 +198,8 @@ public final class AliPlayerImpl extends VideoBehaviorView {
 
         if (!TextUtils.isEmpty(videoUrl)) {
             mMediaController.setVideoInfo(new VideoEntity(videoUrl));
-            mPlayerBuilder.setUrl(videoUrl);
-            mPlayerBuilder._startPlayVideo();
+            mAliPlayer.setUrl(videoUrl);
+            mAliPlayer._startPlayVideo();
             mMediaController.showBg(false);
         }
     }
@@ -214,7 +208,7 @@ public final class AliPlayerImpl extends VideoBehaviorView {
      * 开始播放视频
      */
     public void startPlayVideo() {
-        mPlayerBuilder._startPlayVideo();
+        mAliPlayer._startPlayVideo();
         mMediaController.showBg(false);
     }
 
@@ -222,9 +216,9 @@ public final class AliPlayerImpl extends VideoBehaviorView {
      * 暂停播放并记录播放状态
      */
     public void onPause() {
-        if (mPlayerBuilder.isPlaying()) {
+        if (mAliPlayer.isPlaying()) {
             isBackgroundPause = true;
-            mPlayerBuilder._pausePlayVideo();
+            mAliPlayer._pausePlayVideo();
         }
     }
 
@@ -232,8 +226,8 @@ public final class AliPlayerImpl extends VideoBehaviorView {
      * 停止播放视频
      */
     public void onStop() {
-        if (mPlayerBuilder.isPlaying()) {
-            mPlayerBuilder._stopPlayVideo();
+        if (mAliPlayer.isPlaying()) {
+            mAliPlayer._stopPlayVideo();
         }
     }
 
@@ -245,7 +239,7 @@ public final class AliPlayerImpl extends VideoBehaviorView {
         if (isBackgroundPause) {
             // 如果切换到后台暂停，后又切回来，则继续播放
             isBackgroundPause = false;
-            mPlayerBuilder._resumePlayVideo();
+            mAliPlayer._resumePlayVideo();
         }
     }
 
@@ -253,7 +247,7 @@ public final class AliPlayerImpl extends VideoBehaviorView {
      * 销毁并释放资源
      */
     public void onDestroy() {
-        mPlayerBuilder._destoryPlayer();
+        mAliPlayer._destoryPlayer();
         mMediaController.release();
         unRegisterNetChangedReceiver();
     }
@@ -262,8 +256,8 @@ public final class AliPlayerImpl extends VideoBehaviorView {
      * 进行视频的重播
      */
     public void replay() {
-        if (mPlayerBuilder != null) {
-            mPlayerBuilder._replayVideo();
+        if (mAliPlayer != null) {
+            mAliPlayer._replayVideo();
         }
     }
 
@@ -273,10 +267,10 @@ public final class AliPlayerImpl extends VideoBehaviorView {
      * MediaController中对重试监听已经进行处理
      * 后期可以进行扩展：分享、收藏等
      *
-     * @param onVideoControlListener
+     * @param onAliPlayerControlListener
      */
-    public void setOnVideoControlListener(OnVideoControlListener onVideoControlListener) {
-        mMediaController.setOnVideoControlListener(onVideoControlListener);
+    public void setOnPlayerControlListener(OnAliPlayerControlListener onAliPlayerControlListener) {
+        mMediaController.setOnAliPlayerControlListener(onAliPlayerControlListener);
     }
 
     /**
@@ -370,7 +364,7 @@ public final class AliPlayerImpl extends VideoBehaviorView {
                 break;
             case VideoBehaviorView.FINGER_BEHAVIOR_PROGRESS:
                 Log.i("DDD", "endGesture: bottom");
-                mPlayerBuilder.seekTo(mProgressView.getTargetProgress());
+                mAliPlayer.seekTo(mProgressView.getTargetProgress());
                 mProgressView.hide();
                 break;
         }
@@ -378,7 +372,7 @@ public final class AliPlayerImpl extends VideoBehaviorView {
 
     @Override
     protected void updateSeekUI(int delProgress) {
-        mProgressView.show(delProgress, mPlayerBuilder.getCurrentPosition(), mPlayerBuilder.getDuration());
+        mProgressView.show(delProgress, mAliPlayer.getCurrentPosition(), mAliPlayer.getDuration());
     }
 
     @Override

@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.aliyunlivedemo.R;
-import com.example.aliyunlivedemo.player.listener.OnVideoControlListener;
+import com.example.aliyunlivedemo.player.listener.OnAliPlayerControlListener;
 
 
 /**
@@ -33,7 +33,7 @@ public class VideoErrorView extends FrameLayout {
     private TextView video_error_info;
     private Button video_error_retry;
 
-    private OnVideoControlListener onVideoControlListener;
+    private OnAliPlayerControlListener onAliPlayerControlListener;
 
     public VideoErrorView(Context context) {
         super(context);
@@ -59,8 +59,8 @@ public class VideoErrorView extends FrameLayout {
         video_error_retry.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onVideoControlListener != null) {
-                    onVideoControlListener.onRetry(curStatus);
+                if (onAliPlayerControlListener != null) {
+                    onAliPlayerControlListener.onRetry(curStatus);
                 }
             }
         });
@@ -107,8 +107,8 @@ public class VideoErrorView extends FrameLayout {
         curStatus = STATUS_NORMAL;
     }
 
-    public void setOnVideoControlListener(OnVideoControlListener onVideoControlListener) {
-        this.onVideoControlListener = onVideoControlListener;
+    public void setOnAliPlayerControlListener(OnAliPlayerControlListener onAliPlayerControlListener) {
+        this.onAliPlayerControlListener = onAliPlayerControlListener;
     }
 
     public int getCurStatus() {

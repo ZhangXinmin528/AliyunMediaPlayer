@@ -1,13 +1,8 @@
 package com.example.aliyunlivedemo.player.listener;
 
-import android.media.MediaPlayer;
-
 /**
- * Created by ZhangXinmin on 2017/11/16.
- * Copyright (c) 2017 . All rights reserved.
- * 实现类
+ * 播放回调的具体实现
  */
-
 public class SimplePlayCallback implements OnPlayerCallback {
     @Override
     public void onPrepared() {
@@ -15,7 +10,7 @@ public class SimplePlayCallback implements OnPlayerCallback {
     }
 
     @Override
-    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+    public void onVideoSizeChanged(int width, int height) {
 
     }
 

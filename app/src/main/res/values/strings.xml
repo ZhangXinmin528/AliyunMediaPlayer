@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">AliyunLiveDemo</string>
+
+    <!--直播-->
+    <string name="all_video_start">播放</string>
+    <string name="all_video_pause">暂停</string>
+    <string name="all_video_resume">继续</string>
+    <string name="all_video_stop">停止</string>
+    <string name="all_video_replay">重播</string>
+    <string name="all_video_mute">静音:</string>
+    <string name="all_rb_on">开</string>
+    <string name="all_rb_off">关</string>
+    <string name="all_video_volume">音量：</string>
+    <string name="all_video_brightness">亮度：</string>
+    <string name="all_video_zoom">缩放模式：</string>
+    <string name="all_video_zoom_fit">原比例填充（fit）</string>
+    <string name="all_video_zoom_fill">裁剪占满全屏（fill）</string>
+    <string name="all_video_cache_buffer">最大丢帧缓冲区</string>
+    <string name="all_video_cache_unit">毫秒</string>
+    <string name="all_buffer_duration_nagtive">缓冲时长不能为负数</string>
+    <string name="all_jump_live">跳转到直播页面</string>
+    <string name="all_jump_vod">跳转到点播界面</string>
+    <string name="vod_speed_mode">变速模式</string>
+    <string name="vod_half">0.5倍</string>
+    <string name="vod_one_times">1.0倍</string>
+    <string name="vod_one_and_half_times">1.5倍</string>
+    <string name="vod_two_times">2.0倍</string>
+    <string name="all_live_douyu">斗鱼游戏直播</string>
+    <string name="all_live_lol">LOL直播</string>
+    <string name="all_live_book_reading">读书会</string>
+
+</resources>

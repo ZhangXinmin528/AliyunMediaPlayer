@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.aliyunlivedemo.MainActivity">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#cfcfcf"
+        android:padding="@dimen/dp_12"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/iv_cctv1"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/cctv1" />
+
+        <ImageView
+            android:id="@+id/btn_vod"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="@dimen/dp_8"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/cctv3" />
+
+        <ImageView
+            android:id="@+id/iv_cctv5"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="@dimen/dp_8"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/cctv5" />
+
+        <ImageView
+            android:id="@+id/iv_cctv6"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="@dimen/dp_8"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/cctv6" />
+        <!-- 香港卫视-->
+        <ImageView
+            android:id="@+id/iv_hks"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="@dimen/dp_8"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/hks" />
+        <!-- 亚太卫视-->
+        <ImageView
+            android:id="@+id/iv_asia"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="@dimen/dp_8"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/asia" />
+
+        <!-- 全民直播-->
+        <TextView
+            android:id="@+id/tv_book_reading"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="@dimen/dp_8"
+            android:background="@android:color/white"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/all_live_book_reading"
+            android:textSize="@dimen/sp_18" />
+        <!-- 全民直播-->
+        <TextView
+            android:id="@+id/tv_lol"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="@dimen/dp_8"
+            android:background="@android:color/white"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/all_live_lol"
+            android:textSize="@dimen/sp_18" />
+        <!-- 全民直播-->
+        <TextView
+            android:id="@+id/tv_douyu"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="@dimen/dp_8"
+            android:background="@android:color/white"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/all_live_douyu"
+            android:textSize="@dimen/sp_18" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</android.support.v4.widget.NestedScrollView>

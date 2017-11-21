@@ -28,5 +28,41 @@
     <string name="all_live_douyu">斗鱼游戏直播</string>
     <string name="all_live_lol">LOL直播</string>
     <string name="all_live_book_reading">读书会</string>
+    <string name="all_jump_video_streaming">视频推流测试</string>
+    <string name="all_pull_video_flow">视频拉流测试</string>
+    <string name="all_dialog_tips">提示</string>
+    <string name="all_dialog_confirm">确定</string>
+    <string name="all_dialog_cancel">取消</string>
+    <string name="all_pull_flow_test">直播拉流测试</string>
+    <string name="all_push_net_connection_failed">网络连接失败</string>
+    <string name="no_camera_permission">没有权限使用摄像头，请开启摄像头权限</string>
+    <string name="no_record_audio_permission">没有权限使用录音，请开启录音权限</string>
+
+    <!--推流信息-->
+    <string name="VIDEO_CAPTURE_FPS">视频采集帧率（实时帧率）:</string>
+    <string name="AUDIO_ENCODER_FPS">音频编码帧率（实时帧率）:</string>
+    <string name="VIDEO_ENCODER_FPS">视频编码帧率（实时帧率）:</string>
+    <string name="OUTPUT_BITRATE">输出码率（实时码率）:</string>
+    <string name="AV_OUTPUT_DIFF">当前输出流，audio pts与video pts的差值:</string>
+    <string name="AUDIO_OUTPUT_FPS">音频输出帧率（实时帧率）:</string>
+    <string name="VIDEO_OUTPUT_FPS">视频输出帧率（实时帧率）:</string>
+    <string name="STREAM_PUBLISH_TIME">推流发布耗时（推流开始到发布流成功耗时）:</string>
+    <string name="STREAM_SERVER_IP">推流服务器IP:</string>
+    <string name="VIDEO_DELAY_DURATION">视频延迟时长:</string>
+    <string name="AUDIO_DELAY_DURATION">音频延迟时长:</string>
+    <string name="VIDEO_CACHE_FRAME_CNT">缓冲队列视频帧数:</string>
+    <string name="AUDIO_CACHE_FRAME_CNT">缓冲队列音频帧数:</string>
+    <string name="VIDEO_CACHE_BYTE_SIZE">缓冲队列视频数据总数:</string>
+    <string name="AUDIO_CACHE_BYTE_SIZE">缓冲队列音频数据总数:</string>
+    <string name="VIDEO_FRAME_DISCARD_CNT">视频丢弃总帧数:</string>
+    <string name="AUDIO_FRAME_DISCARD_CNT">音频丢弃总帧数:</string>
+    <string name="CUR_VIDEO_BUEATY_DURATION">当前视频帧美颜耗时:</string>
+    <string name="CUR_VIDEO_ENCODER_DURATION">当前视频帧编码耗时:</string>
+    <string name="cur_video_encode_bitrate">当前视频编码码率:</string>
+    <string name="VIDEO_OUTPUT_FRAME_COUNT">获取视频流已发送帧数:</string>
+    <string name="VIDEO_DATA">视频流已发送数据量:</string>
+    <string name="VIDEO_BUFFER_COUNT">当前手机端缓存的视频帧总数:</string>
+    <string name="VIDEO_DROPPED_FRAMECOUNT">当前直播视频流丢帧总数:</string>
+    <string name="AUDIO_DATA">音频流已发送数据量:</string>
 
 </resources>

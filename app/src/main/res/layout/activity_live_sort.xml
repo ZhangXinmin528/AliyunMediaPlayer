@@ -22,7 +22,7 @@
             android:src="@drawable/cctv1" />
 
         <ImageView
-            android:id="@+id/btn_vod"
+            android:id="@+id/iv_cctv3"
             android:layout_width="140dp"
             android:layout_height="60dp"
             android:layout_marginTop="@dimen/dp_8"
@@ -73,14 +73,14 @@
 
         <!-- 全民直播-->
         <TextView
-            android:id="@+id/tv_book_reading"
+            android:id="@+id/tv_pull_flow_test"
             android:layout_width="140dp"
             android:layout_height="60dp"
             android:layout_marginTop="@dimen/dp_8"
             android:background="@android:color/white"
             android:clickable="true"
             android:gravity="center"
-            android:text="@string/all_live_book_reading"
+            android:text="@string/all_pull_flow_test"
             android:textSize="@dimen/sp_18" />
         <!-- 全民直播-->
         <TextView

@@ -21,4 +21,26 @@
         android:layout_marginTop="@dimen/dp_8"
         android:text="@string/all_jump_vod" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:layout_marginTop="@dimen/dp_6"
+        android:background="#989898" />
+
+    <!--推流测试-->
+    <Button
+        android:id="@+id/btn_push_video_flow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/all_jump_video_streaming" />
+
+    <!--拉流测试-->
+    <Button
+        android:id="@+id/btn_pull_video_flow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:text="@string/all_pull_video_flow" />
+
 </android.support.v7.widget.LinearLayoutCompat>

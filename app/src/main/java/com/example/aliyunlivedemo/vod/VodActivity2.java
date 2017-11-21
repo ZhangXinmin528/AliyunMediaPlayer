@@ -7,8 +7,8 @@ import android.view.WindowManager;
 
 import com.example.aliyunlivedemo.R;
 import com.example.aliyunlivedemo.base.BaseActivity;
-import com.example.aliyunlivedemo.player.listener.OnAliPlayerControlListener;
-import com.example.aliyunlivedemo.player.video.AliPlayerView;
+import com.example.aliyunlivedemo.vod.vodplayer.listener.OnAliPlayerControlListener;
+import com.example.aliyunlivedemo.vod.vodplayer.video.AliPlayerView;
 import com.example.aliyunlivedemo.util.DisplayUtils;
 
 /**

@@ -11,6 +11,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:name=".app.VideoApplication"
@@ -28,9 +33,16 @@
             </intent-filter>
         </activity>
 
-        <!--直播-->
-        <activity android:name=".live.LiveSortActivity" />
-        <activity android:name=".live.LiveActivity" />
+        <!--直播：拉流-->
+        <activity android:name=".live.pull.LiveSortActivity" />
+        <activity android:name=".live.pull.LiveActivity" />
+        <activity android:name=".live.pull.LivePorActivity" />
+
+        <!--直播：推流-->
+        <activity
+            android:name=".live.push.LivePushFlowActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop" />
 
         <!--点播-->
         <activity android:name=".vod.VodSortActivity" />

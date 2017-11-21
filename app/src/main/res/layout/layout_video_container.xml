@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.example.aliyunlivedemo.player.view.VideoControllerView
+    <com.example.aliyunlivedemo.vod.vodplayer.view.VideoControllerView
         android:id="@+id/video_controller"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -17,14 +17,14 @@
         android:id="@+id/video_loading"
         layout="@layout/video_controller_loading" />
 
-    <com.example.aliyunlivedemo.player.view.VideoSystemOverlay
+    <com.example.aliyunlivedemo.vod.vodplayer.view.VideoSystemOverlay
         android:id="@+id/video_system_overlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <com.example.aliyunlivedemo.player.view.VideoProgressOverlay
+    <com.example.aliyunlivedemo.vod.vodplayer.view.VideoProgressOverlay
         android:id="@+id/video_progress_overlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

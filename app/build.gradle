@@ -15,11 +15,25 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+//        debug {
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
     }
 
     repositories {
         flatDir {
             dirs 'libs'
+        }
+    }
+
+    //调用推流底层链接库
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a'
         }
     }
 
@@ -32,6 +46,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    //推流jar包
+    implementation files('libs/alivc-live-record.jar')
+    //阿里播放器
     compile(name: 'AliyunPlayer', ext: 'aar')
+    //日志
     implementation 'com.orhanobut:logger:2.1.1'
 }

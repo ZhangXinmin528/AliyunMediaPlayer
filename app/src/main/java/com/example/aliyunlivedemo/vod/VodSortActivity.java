@@ -144,7 +144,7 @@ public class VodSortActivity extends BaseActivity {
         itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent vod = new Intent(mContext, VodActivity2.class);
+                Intent vod = new Intent(mContext, VodActivity.class);
                 vod.putExtra(PARAMS_URL, videoInfo.getLink());
                 startActivity(vod);
             }

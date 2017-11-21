@@ -140,7 +140,7 @@ public class LivePushFlowActivity extends BaseActivity {
                         .watermarkUrl(bundle.getString(LiveConfig.WATERMARK_URL.name()))
                         .paddingX(bundle.getInt(LiveConfig.WATERMARK_PADDINGX.name()))
                         .paddingY(bundle.getInt(LiveConfig.WATERMARK_PADDINGY.name()))
-                        .site(bundle.getInt(LiveConfig.WATERMARK_SITE.name()))
+                        .site(bundle.getInt(LiveConfig.WATERMARK_LOCATION.name()))
                         .build();
                 minBitrate = bundle.getInt(LiveConfig.MIN_BITRATE.name());
                 maxBitrate = bundle.getInt(LiveConfig.MAX_BITRATE.name());
@@ -153,6 +153,7 @@ public class LivePushFlowActivity extends BaseActivity {
                         "\n..cameraFacing:" + cameraFacing +
                         "\n..screenOrientation:" + screenOrientation +
                         "\n..WATERMARK_URL:" + bundle.getString(LiveConfig.WATERMARK_URL.name()) +
+                        "\n..WATERMARK_LOCATION:" + bundle.getInt(LiveConfig.WATERMARK_LOCATION.name()) +
                         "\n..minBitrate:" + minBitrate +
                         "\n..maxBitrate:" + maxBitrate +
                         "\n..bestBitrate:" + bestBitrate +
@@ -278,6 +279,7 @@ public class LivePushFlowActivity extends BaseActivity {
         try {
             mMediaRecorder.startRecord(pushUrl);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         isRecording = true;
     }

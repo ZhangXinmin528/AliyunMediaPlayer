@@ -72,18 +72,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         //推流地址
         final String rtmpUrl = "rtmp://video-center.alivecdn.com/hlHv/hcTest?vhost=djt-live.boguforum.com";
         //水印位置
-        final String waterurl = "assets://live/wartermark/logo.png";
+        final String waterurl = "assets://live/watermark/logo.png";
 
         Intent intent = new FlowPushRequestBuilder()
                 .setBestBitrate(600)//最佳比特率
                 .setCameraFacing(AlivcMediaFormat.CAMERA_FACING_FRONT)//摄像头
-                .setPaddingx(14)
-                .setPaddingy(14)
+                .setPaddingx(30)
+                .setPaddingy(30)
                 .setWaterLocation(1)//地址
                 .setRtmpUrl(rtmpUrl)//推流地址
                 .setVideoResolution(AlivcMediaFormat.OUTPUT_RESOLUTION_480P)//视频分辨率
                 .setScreenOrientation(FlowPushRequestBuilder.SCREEN_PORTRAIT)//横竖屏设置
-                .setWatermarkUrl(waterurl)//水印
+                .setWatermarkUrl("")//水印
                 .setMinBitrate(500)//最小比特率
                 .setMaxBitrate(800)//最大比特率
                 .setFrameRate(30)//帧速率:必须在0~30之间

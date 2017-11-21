@@ -190,7 +190,7 @@ public final class FlowPushRequestBuilder {
         intent.putExtra(LiveConfig.WATERMARK_URL.name(), watermarkUrl);
         intent.putExtra(LiveConfig.WATERMARK_PADDINGX.name(), paddingX);
         intent.putExtra(LiveConfig.WATERMARK_PADDINGY.name(), paddingY);
-        intent.putExtra(LiveConfig.WATERMARK_SITE.name(), waterLocation);
+        intent.putExtra(LiveConfig.WATERMARK_LOCATION.name(), waterLocation);
         intent.putExtra(LiveConfig.BEST_BITRATE.name(), bestBitrate);
         intent.putExtra(LiveConfig.MIN_BITRATE.name(), minBitrate);
         intent.putExtra(LiveConfig.MAX_BITRATE.name(), maxBitrate);

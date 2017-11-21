@@ -14,7 +14,7 @@ public enum LiveConfig {
     WATERMARK_URL,//水印路径
     WATERMARK_PADDINGX,//水印属性
     WATERMARK_PADDINGY,//
-    WATERMARK_SITE,//水印网址
+    WATERMARK_LOCATION,//水印位置
     BEST_BITRATE,//最佳比特率
     MIN_BITRATE,//最小比特率
     MAX_BITRATE,//最大比特率

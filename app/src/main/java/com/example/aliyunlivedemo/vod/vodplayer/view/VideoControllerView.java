@@ -15,13 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aliyunlivedemo.R;
+import com.example.aliyunlivedemo.util.DisplayUtils;
+import com.example.aliyunlivedemo.util.NetWorkUtils;
+import com.example.aliyunlivedemo.util.StringUtils;
 import com.example.aliyunlivedemo.vod.vodplayer.bean.IVideoEntity;
 import com.example.aliyunlivedemo.vod.vodplayer.listener.AliPlayerControlImpl;
 import com.example.aliyunlivedemo.vod.vodplayer.listener.OnAliPlayerControlListener;
 import com.example.aliyunlivedemo.vod.vodplayer.video._AliPlayer;
-import com.example.aliyunlivedemo.util.DisplayUtils;
-import com.example.aliyunlivedemo.util.NetworkUtils;
-import com.example.aliyunlivedemo.util.StringUtils;
 
 
 /**
@@ -313,9 +313,9 @@ public class VideoControllerView extends FrameLayout {
      * 判断显示错误类型
      */
     public void checkShowError(boolean isNetChanged) {
-        boolean isConnect = NetworkUtils.isNetworkConnected(getContext());
-        boolean isMobileNet = NetworkUtils.isMobileConnected(getContext());
-        boolean isWifiNet = NetworkUtils.isWifiConnected(getContext());
+        boolean isConnect = NetWorkUtils.isNetworkConnected(getContext());
+        boolean isMobileNet = NetWorkUtils.isMobileConnected(getContext());
+        boolean isWifiNet = NetWorkUtils.isWifiConnected(getContext());
 
         if (isConnect) {
             // 如果已经联网
@@ -387,7 +387,7 @@ public class VideoControllerView extends FrameLayout {
                 break;
             case VideoErrorView.STATUS_NO_NETWORK_ERROR:
                 // 无网络时
-                if (NetworkUtils.isNetworkConnected(getContext())) {
+                if (NetWorkUtils.isNetworkConnected(getContext())) {
                     if (videoInfo == null) {
                         // 如果video为空，重新请求详情
                         retry(VideoErrorView.STATUS_VIDEO_DETAIL_ERROR);

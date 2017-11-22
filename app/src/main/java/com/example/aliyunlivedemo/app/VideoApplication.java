@@ -3,7 +3,6 @@ package com.example.aliyunlivedemo.app;
 import android.app.Application;
 
 import com.alivc.player.AliVcMediaPlayer;
-import com.duanqu.qupai.jni.ApplicationGlue;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
@@ -27,9 +26,9 @@ public class VideoApplication extends Application {
         AliVcMediaPlayer.init(this, businessId);
 
 //        //初始化推流
-        System.loadLibrary("gnustl_shared");
-        System.loadLibrary("qupai-media-thirdparty");
-        System.loadLibrary("qupai-media-jni");
-        ApplicationGlue.initialize(this);
+//        System.loadLibrary("gnustl_shared");
+//        System.loadLibrary("qupai-media-thirdparty");
+//        System.loadLibrary("qupai-media-jni");
+//        ApplicationGlue.initialize(this);
     }
 }

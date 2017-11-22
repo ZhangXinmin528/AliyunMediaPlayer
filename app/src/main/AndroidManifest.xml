@@ -40,9 +40,22 @@
 
         <!--直播：推流-->
         <activity
-            android:name=".live.push.LivePushFlowActivity"
+            android:name=".live.push.push_1_3.LivePushFlowOldActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop" />
+        <!--直播：推流v3.0-->
+        <!--配置页面-->
+        <activity
+            android:name=".live.push.push_3_0.PushConfigActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <!--直播推流界面-->
+        <activity
+            android:name=".live.push.push_3_0.LivePushFlowActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <!--点播-->
         <activity android:name=".vod.VodSortActivity" />

@@ -94,12 +94,19 @@ public class VodSortActivity extends BaseActivity {
         video6.setLink("http://112.253.22.163/6/v/x/l/d/vxldcbqrerhegsbhdvpwujjkomjixc/" +
                 "he.yinyuetai.com/5634014097C4ECEEFCE20BFFF8E11178.flv");
 
+        VideoInfo video7 = new VideoInfo();
+        video7.setId(7);
+        video7.setTitle("Homily 课程");
+        video7.setAuthor("Homily");
+        video7.setLink("http://iptv.legu168.com/gsjt/gszfx4194.flv");
+
         mDataList.add(video1);
         mDataList.add(video2);
         mDataList.add(video3);
         mDataList.add(video4);
         mDataList.add(video5);
         mDataList.add(video6);
+        mDataList.add(video7);
 
         addItemView();
     }

@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.aliyunlivedemo.R;
+import com.example.aliyunlivedemo.util.NetWorkUtils;
 import com.example.aliyunlivedemo.vod.vodplayer.bean.IVideoEntity;
 import com.example.aliyunlivedemo.vod.vodplayer.bean.VideoEntity;
 import com.example.aliyunlivedemo.vod.vodplayer.listener.OnAliPlayerControlListener;
@@ -29,7 +30,6 @@ import com.example.aliyunlivedemo.vod.vodplayer.view.VideoBehaviorView;
 import com.example.aliyunlivedemo.vod.vodplayer.view.VideoControllerView;
 import com.example.aliyunlivedemo.vod.vodplayer.view.VideoProgressOverlay;
 import com.example.aliyunlivedemo.vod.vodplayer.view.VideoSystemOverlay;
-import com.example.aliyunlivedemo.util.NetworkUtils;
 
 /**
  * 视频播放器的封装类
@@ -398,7 +398,7 @@ public final class AliPlayerView extends VideoBehaviorView {
             if (extra != null && extra instanceof NetworkInfo) {
                 NetworkInfo netInfo = (NetworkInfo) extra;
 
-                if (NetworkUtils.isNetworkConnected(context)
+                if (NetWorkUtils.isNetworkConnected(context)
                         && netInfo.getState() != NetworkInfo.State.CONNECTED) {
                     // 网络连接的情况下只处理连接完成状态
                     return;

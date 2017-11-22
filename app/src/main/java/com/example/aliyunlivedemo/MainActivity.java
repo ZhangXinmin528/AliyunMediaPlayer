@@ -8,7 +8,8 @@ import com.alibaba.livecloud.live.AlivcMediaFormat;
 import com.example.aliyunlivedemo.base.BaseActivity;
 import com.example.aliyunlivedemo.live.pull.LivePorActivity;
 import com.example.aliyunlivedemo.live.pull.LiveSortActivity;
-import com.example.aliyunlivedemo.live.push.FlowPushRequestBuilder;
+import com.example.aliyunlivedemo.live.push.push_1_3.FlowPushRequestBuilder;
+import com.example.aliyunlivedemo.live.push.push_3_0.PushConfigActivity;
 import com.example.aliyunlivedemo.vod.VodSortActivity;
 
 import static com.example.aliyunlivedemo.live.pull.LiveActivity.PARAMS_URL;
@@ -33,7 +34,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.initViews();
         findViewById(R.id.btn_live).setOnClickListener(this);
         findViewById(R.id.btn_vod).setOnClickListener(this);
-        findViewById(R.id.btn_push_video_flow).setOnClickListener(this);
+        findViewById(R.id.btn_push_video_flow_v1_3).setOnClickListener(this);
+        findViewById(R.id.btn_push_video_flow_v3_0).setOnClickListener(this);
         findViewById(R.id.btn_pull_video_flow).setOnClickListener(this);
     }
 
@@ -48,8 +50,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Intent vodIntent = new Intent(mContext, VodSortActivity.class);
                 startActivity(vodIntent);
                 break;
-            case R.id.btn_push_video_flow://推流测试
+            case R.id.btn_push_video_flow_v1_3://推流测试v1.3
                 startPushFlow();
+                break;
+            case R.id.btn_push_video_flow_v3_0://推流测试v3.0
+                Intent pushIntent = new Intent(mContext, PushConfigActivity.class);
+                startActivity(pushIntent);
                 break;
             case R.id.btn_pull_video_flow://拉流测试
                 Intent pullIntent = new Intent(mContext, LivePorActivity.class);

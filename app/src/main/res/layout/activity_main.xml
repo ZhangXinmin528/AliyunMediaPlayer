@@ -28,12 +28,19 @@
         android:layout_marginTop="@dimen/dp_6"
         android:background="#989898" />
 
-    <!--推流测试-->
+    <!--推流测试1.3-->
     <Button
-        android:id="@+id/btn_push_video_flow"
+        android:id="@+id/btn_push_video_flow_v1_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/all_jump_video_streaming" />
+        android:text="@string/all_push_flow_1_3" />
+
+    <!--推流测试3.0-->
+    <Button
+        android:id="@+id/btn_push_video_flow_v3_0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/all_push_flow_3_0" />
 
     <!--拉流测试-->
     <Button

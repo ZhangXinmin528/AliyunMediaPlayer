@@ -9,7 +9,7 @@ import com.example.aliyunlivedemo.base.BaseActivity;
 import com.example.aliyunlivedemo.live.pull.LivePorActivity;
 import com.example.aliyunlivedemo.live.pull.LiveSortActivity;
 import com.example.aliyunlivedemo.live.push.push_1_3.FlowPushRequestBuilder;
-import com.example.aliyunlivedemo.live.push.push_3_0.PushConfigActivity;
+import com.example.aliyunlivedemo.live.push.push_3_0.PushConfigBuilder;
 import com.example.aliyunlivedemo.vod.VodSortActivity;
 
 import static com.example.aliyunlivedemo.live.pull.LiveActivity.PARAMS_URL;
@@ -18,6 +18,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 
     private Context mContext;
+    private String mRtmpUrl;
 
     @Override
     protected Object setLayout() {
@@ -27,6 +28,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initParamsAndValues() {
         mContext = this;
+        mRtmpUrl = "rtmp://video-center.alivecdn.com/hlHv/hcTest?vhost=djt-live.boguforum.com";
     }
 
     @Override
@@ -51,11 +53,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(vodIntent);
                 break;
             case R.id.btn_push_video_flow_v1_3://推流测试v1.3
-                startPushFlow();
+                startPushFlowOld();
                 break;
             case R.id.btn_push_video_flow_v3_0://推流测试v3.0
-                Intent pushIntent = new Intent(mContext, PushConfigActivity.class);
-                startActivity(pushIntent);
+//                Intent pushIntent = new Intent(mContext, PushConfigActivity.class);
+//                startActivity(pushIntent);
+                startPushFlowNew();
                 break;
             case R.id.btn_pull_video_flow://拉流测试
                 Intent pullIntent = new Intent(mContext, LivePorActivity.class);
@@ -70,13 +73,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     /**
-     * 跳转到推流界面
+     * 跳转到推流界面v1.3
      *
      * @hide
      */
-    private void startPushFlow() {
-        //推流地址
-        final String rtmpUrl = "rtmp://video-center.alivecdn.com/hlHv/hcTest?vhost=djt-live.boguforum.com";
+    private void startPushFlowOld() {
         //水印位置
         final String waterurl = "assets://live/watermark/logo.png";
 
@@ -86,7 +87,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 .setPaddingx(30)
                 .setPaddingy(30)
                 .setWaterLocation(1)//地址
-                .setRtmpUrl(rtmpUrl)//推流地址
+                .setRtmpUrl(mRtmpUrl)//推流地址
                 .setVideoResolution(AlivcMediaFormat.OUTPUT_RESOLUTION_480P)//视频分辨率
                 .setScreenOrientation(FlowPushRequestBuilder.SCREEN_PORTRAIT)//横竖屏设置
                 .setWatermarkUrl("")//水印
@@ -97,5 +98,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 .createIntent(mContext);
         startActivity(intent);
 
+    }
+
+    private void startPushFlowNew() {
+        Intent intent = new PushConfigBuilder()
+                .setRtmpUrl(mRtmpUrl)
+                .setAsync(false)
+                .setAudioOnly(false)
+                .setCameraId(0)
+                .setFlashOn(false)
+                .setScreenOrientation(0)
+                .createIntent(mContext);
+        startActivity(intent);
     }
 }

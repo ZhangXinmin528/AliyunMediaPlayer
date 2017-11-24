@@ -27,6 +27,7 @@ import com.alivc.live.pusher.AlivcLivePushNetworkListener;
 import com.alivc.live.pusher.AlivcLivePusher;
 import com.example.aliyunlivedemo.R;
 import com.example.aliyunlivedemo.live.push.push_3_0.LivePushFlowActivity;
+import com.example.aliyunlivedemo.util.LiveConfig;
 
 import static com.alivc.live.pusher.AlivcLivePushCameraTypeEnum.CAMERA_TYPE_BACK;
 import static com.alivc.live.pusher.AlivcLivePushCameraTypeEnum.CAMERA_TYPE_FRONT;
@@ -40,12 +41,7 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
 
     private static final String TAG = LivePushFragment.class.getSimpleName();
 
-    private static final String URL_KEY = "url_key";
-    private static final String ASYNC_KEY = "async_key";
-    private static final String AUDIO_ONLY_KEY = "audio_only_key";
-    private static final String CAMERA_ID = "camera_id";
-    private static final String FLASH_ON = "flash_on";
-    private final long REFRESH_INTERVAL = 2000;
+    private static final long REFRESH_INTERVAL = 2000;
 
     private Context mContext;
     private AlivcLivePusher mAlivcLivePusher = null;
@@ -57,7 +53,7 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
     private boolean isPushing = false;
     private int mCameraId;
     private boolean isFlash = false;
-    private boolean flashState = true;
+    private boolean flashState;
     //控件
     private ImageView mExit;
     private ImageView mVolume;
@@ -65,14 +61,12 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
     private ImageView mCamera;
     private ImageView mBeautyButton;
     private LinearLayout mTopBar;
-    private TextView mUrl;
     private TextView mIsPushing;
     private LinearLayout mGuide;
 
     private Button mPreviewButton;
     private Button mPushButton;
     private Button mOperaButton;
-    private Button mMore;
     private Button mRestartButton;
     private Handler mHandler;
 
@@ -81,15 +75,15 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
     public static LivePushFragment newInstance(String url, boolean async,
                                                boolean mAudio, int cameraId,
                                                boolean isFlash) {
-        LivePushFragment livePushFragment = new LivePushFragment();
+        LivePushFragment fragment = new LivePushFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(URL_KEY, url);
-        bundle.putBoolean(ASYNC_KEY, async);
-        bundle.putBoolean(AUDIO_ONLY_KEY, mAudio);
-        bundle.putInt(CAMERA_ID, cameraId);
-        bundle.putBoolean(FLASH_ON, isFlash);
-        livePushFragment.setArguments(bundle);
-        return livePushFragment;
+        bundle.putString(LiveConfig.LIVE_URL.name(), url);
+        bundle.putBoolean(LiveConfig.IS_ANSYC.name(), async);
+        bundle.putBoolean(LiveConfig.IS_AUDIO_ONLY.name(), mAudio);
+        bundle.putInt(LiveConfig.CAMERA_ID.name(), cameraId);
+        bundle.putBoolean(LiveConfig.IS_FLASH_ON.name(), isFlash);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -111,20 +105,20 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
         //init params
         Bundle bundle = getArguments();
         if (bundle != null) {
-            if (bundle.containsKey(URL_KEY)) {
-                mPushUrl = getArguments().getString(URL_KEY);
+            if (bundle.containsKey(LiveConfig.LIVE_URL.name())) {
+                mPushUrl = getArguments().getString(LiveConfig.LIVE_URL.name());
             }
-            if (bundle.containsKey(URL_KEY)) {
-                mAsync = getArguments().getBoolean(ASYNC_KEY, false);
+            if (bundle.containsKey(LiveConfig.IS_ANSYC.name())) {
+                mAsync = getArguments().getBoolean(LiveConfig.IS_ANSYC.name(), false);
             }
-            if (bundle.containsKey(URL_KEY)) {
-                mAudio = getArguments().getBoolean(AUDIO_ONLY_KEY, false);
+            if (bundle.containsKey(LiveConfig.IS_AUDIO_ONLY.name())) {
+                mAudio = getArguments().getBoolean(LiveConfig.IS_AUDIO_ONLY.name(), false);
             }
-            if (bundle.containsKey(URL_KEY)) {
-                mCameraId = getArguments().getInt(CAMERA_ID);
+            if (bundle.containsKey(LiveConfig.CAMERA_ID.name())) {
+                mCameraId = getArguments().getInt(LiveConfig.CAMERA_ID.name());
             }
-            if (bundle.containsKey(URL_KEY)) {
-                isFlash = getArguments().getBoolean(FLASH_ON, false);
+            if (bundle.containsKey(LiveConfig.IS_FLASH_ON.name())) {
+                isFlash = getArguments().getBoolean(LiveConfig.IS_FLASH_ON.name(), false);
             }
             flashState = isFlash;
         }
@@ -168,20 +162,15 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
         mOperaButton = (Button) view.findViewById(R.id.opera_button);
         mOperaButton.setOnClickListener(this);
         mOperaButton.setSelected(false);
-        mMore = (Button) view.findViewById(R.id.more);
-        mMore.setOnClickListener(this);
         mBeautyButton = (ImageView) view.findViewById(R.id.beauty_button);
         mBeautyButton.setOnClickListener(this);
         mBeautyButton.setSelected(true);
         mRestartButton = (Button) view.findViewById(R.id.restart_button);
         mRestartButton.setOnClickListener(this);
         mTopBar = (LinearLayout) view.findViewById(R.id.top_bar);
-        mUrl = (TextView) view.findViewById(R.id.push_url);
-        mUrl.setText(mPushUrl);
         mIsPushing = (TextView) view.findViewById(R.id.isPushing);
         mIsPushing.setText(String.valueOf(isPushing));
 
-        mMore.setVisibility(mAudio ? View.GONE : View.VISIBLE);
         mTopBar.setVisibility(mAudio ? View.GONE : View.VISIBLE);
         mFlash.setClickable(mCameraId == CAMERA_TYPE_FRONT.getCameraId() ? false : true);
     }
@@ -230,57 +219,57 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
     AlivcLivePushInfoListener mPushInfoListener = new AlivcLivePushInfoListener() {
         @Override
         public void onPreviewStarted(AlivcLivePusher pusher) {
-            showToast(getString(R.string.start_preview));
+            showToast("推流通知监听器.."+getString(R.string.start_preview));
         }
 
         @Override
         public void onPreviewStoped(AlivcLivePusher pusher) {
-            showToast(getString(R.string.stop_preview));
+            showToast("推流通知监听器.."+getString(R.string.stop_preview));
         }
 
         @Override
         public void onPushStarted(AlivcLivePusher pusher) {
-            showToast(getString(R.string.start_push));
+            showToast("推流通知监听器.."+getString(R.string.start_push));
         }
 
         @Override
         public void onPushPauesed(AlivcLivePusher pusher) {
-            showToast(getString(R.string.pause_push));
+            showToast("推流通知监听器.."+getString(R.string.pause_push));
         }
 
         @Override
         public void onPushResumed(AlivcLivePusher pusher) {
-            showToast(getString(R.string.resume_push));
+            showToast("推流通知监听器.."+getString(R.string.resume_push));
         }
 
         @Override
         public void onPushStoped(AlivcLivePusher pusher) {
-            showToast(getString(R.string.stop_push));
+            showToast("推流通知监听器.."+getString(R.string.stop_push));
         }
 
         @Override
         public void onPushRestarted(AlivcLivePusher pusher) {
-            showToast(getString(R.string.restart_success));
+            showToast("推流通知监听器.."+getString(R.string.restart_success));
         }
 
         @Override
         public void onFirstFramePreviewed(AlivcLivePusher pusher) {
-            showToast(getString(R.string.first_frame));
+            showToast("推流通知监听器.."+getString(R.string.first_frame));
         }
 
         @Override
         public void onDropFrame(AlivcLivePusher pusher, int countBef, int countAft) {
-            showToast(getString(R.string.drop_frame) + ", 丢帧前：" + countBef + ", 丢帧后：" + countAft);
+            showToast("推流通知监听器.."+getString(R.string.drop_frame) + ", 丢帧前：" + countBef + ", 丢帧后：" + countAft);
         }
 
         @Override
         public void onAdjustBitRate(AlivcLivePusher pusher, int curBr, int targetBr) {
-            showToast(getString(R.string.adjust_bitrate) + ", 当前码率：" + curBr + "Kps, 目标码率：" + targetBr + "Kps");
+            showToast("推流通知监听器.."+getString(R.string.adjust_bitrate) + ", 当前码率：" + curBr + "Kps, 目标码率：" + targetBr + "Kps");
         }
 
         @Override
         public void onAdjustFps(AlivcLivePusher pusher, int curFps, int targetFps) {
-            showToast(getString(R.string.adjust_fps) + ", 当前帧率：" + curFps + ", 目标帧率：" + targetFps);
+            showToast("推流通知监听器.."+getString(R.string.adjust_fps) + ", 当前帧率：" + curFps + ", 目标帧率：" + targetFps);
         }
     };
 
@@ -601,12 +590,6 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
                         mAlivcLivePusher.restartPush();
                     }
                     break;
-                /*case R.id.more:
-                    PushMoreDialog pushMoreDialog = new PushMoreDialog();
-                    pushMoreDialog.setAlivcLivePusher(mAlivcLivePusher);
-                    pushMoreDialog.setPushUrl(mPushUrl);
-                    pushMoreDialog.show(getFragmentManager(), "moreDialog");
-                    break;*/
                 default:
                     break;
             }

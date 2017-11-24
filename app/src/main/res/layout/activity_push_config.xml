@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!--title-->
     <RelativeLayout
         android:id="@+id/title_view"
         android:layout_width="match_parent"
@@ -30,6 +31,7 @@
             android:textSize="@dimen/sp_16" />
     </RelativeLayout>
 
+    <!--扫码-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,12 +66,13 @@
     </LinearLayout>
 
     <include
-        layout="@layout/push_setting_param"
+        layout="@layout/layout_push_setting_param"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="15dp"
         android:layout_weight="1" />
 
+    <!--推流按钮-->
     <LinearLayout
         android:id="@+id/beginPublish"
         android:layout_width="80dp"

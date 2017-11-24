@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:padding="10dp">
 
+    <!--操作按钮-->
     <RelativeLayout
         android:id="@+id/top_bar_layout"
         android:layout_width="match_parent"
@@ -60,32 +61,12 @@
 
     </RelativeLayout>
 
+    <!--推流地址-->
     <LinearLayout
-        android:id="@+id/push_url_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_bar_layout"
-        android:layout_marginTop="50dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:text="@string/push_url" />
-
-        <TextView
-            android:id="@+id/push_url"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/push_url_layout"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/dp_20"
         android:gravity="center">
 
         <TextView
@@ -101,6 +82,7 @@
 
     </LinearLayout>
 
+    <!--推流按钮-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -143,15 +125,6 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:text="@string/repush_button" />
-
-        <Button
-            android:id="@+id/more"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:text="@string/more_setting_button" />
 
     </LinearLayout>
 

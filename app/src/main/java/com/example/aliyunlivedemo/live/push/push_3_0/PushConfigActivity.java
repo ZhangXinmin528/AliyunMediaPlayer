@@ -146,7 +146,7 @@ public class PushConfigActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.push_setting);
+        setContentView(R.layout.activity_push_config);
         mAlivcLivePushConfig = new AlivcLivePushConfig();
         initView();
         setClick();

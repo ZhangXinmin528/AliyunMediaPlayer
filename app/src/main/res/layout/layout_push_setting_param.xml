@@ -742,7 +742,6 @@
             </LinearLayout>
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -861,7 +860,7 @@
 
 
         <include
-            layout="@layout/beauty_setting"
+            layout="@layout/layout_push_beauty_setting"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="20dp" />

@@ -183,7 +183,7 @@ public final class FlowPushRequestBuilder {
      */
     public Intent createIntent(@Nullable Context context) {
         Intent intent = new Intent(context, LivePushFlowOldActivity.class);
-        intent.putExtra(LiveConfig.URL.name(), rtmpUrl);
+        intent.putExtra(LiveConfig.LIVE_URL.name(), rtmpUrl);
         intent.putExtra(LiveConfig.VIDEO_RESOLUTION.name(), videoResolution);
         intent.putExtra(LiveConfig.SCREEN_ORIENTATION.name(), screenOrientation);
         intent.putExtra(LiveConfig.CAMERA_FACING.name(), cameraFacing);

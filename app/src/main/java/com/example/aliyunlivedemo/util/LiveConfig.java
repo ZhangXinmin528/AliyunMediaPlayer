@@ -7,7 +7,7 @@ package com.example.aliyunlivedemo.util;
  */
 
 public enum LiveConfig {
-    URL,//推流地址
+    LIVE_URL,//直播地址
     VIDEO_RESOLUTION,//视频分辨率
     SCREEN_ORIENTATION,//屏幕方向
     CAMERA_FACING,//前置摄像头
@@ -20,4 +20,8 @@ public enum LiveConfig {
     MAX_BITRATE,//最大比特率
     INIT_BITRATE,//
     FRAME_RATE,//帧速率
+    IS_ANSYC,//异步
+    IS_AUDIO_ONLY,//纯音频
+    CAMERA_ID,//摄像头
+    IS_FLASH_ON,//打开闪光灯
 }

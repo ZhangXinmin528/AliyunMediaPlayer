@@ -131,7 +131,7 @@ public class LivePushFlowOldActivity extends BaseActivity {
         if (intent != null) {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
-                pushUrl = bundle.getString(LiveConfig.URL.name());
+                pushUrl = bundle.getString(LiveConfig.LIVE_URL.name());
                 videoResolution = bundle.getInt(LiveConfig.VIDEO_RESOLUTION.name());
                 screenOrientation = bundle.getBoolean(LiveConfig.SCREEN_ORIENTATION.name());
                 cameraFacing = bundle.getInt(LiveConfig.CAMERA_FACING.name());

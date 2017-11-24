@@ -219,57 +219,57 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
     AlivcLivePushInfoListener mPushInfoListener = new AlivcLivePushInfoListener() {
         @Override
         public void onPreviewStarted(AlivcLivePusher pusher) {
-            showToast("推流通知监听器.."+getString(R.string.start_preview));
+            showToast("推流通知监听器.." + getString(R.string.start_preview));
         }
 
         @Override
         public void onPreviewStoped(AlivcLivePusher pusher) {
-            showToast("推流通知监听器.."+getString(R.string.stop_preview));
+            showToast("推流通知监听器.." + getString(R.string.stop_preview));
         }
 
         @Override
         public void onPushStarted(AlivcLivePusher pusher) {
-            showToast("推流通知监听器.."+getString(R.string.start_push));
+            showToast("推流通知监听器.." + getString(R.string.start_push));
         }
 
         @Override
         public void onPushPauesed(AlivcLivePusher pusher) {
-            showToast("推流通知监听器.."+getString(R.string.pause_push));
+            showToast("推流通知监听器.." + getString(R.string.pause_push));
         }
 
         @Override
         public void onPushResumed(AlivcLivePusher pusher) {
-            showToast("推流通知监听器.."+getString(R.string.resume_push));
+            showToast("推流通知监听器.." + getString(R.string.resume_push));
         }
 
         @Override
         public void onPushStoped(AlivcLivePusher pusher) {
-            showToast("推流通知监听器.."+getString(R.string.stop_push));
+            showToast("推流通知监听器.." + getString(R.string.stop_push));
         }
 
         @Override
         public void onPushRestarted(AlivcLivePusher pusher) {
-            showToast("推流通知监听器.."+getString(R.string.restart_success));
+            showToast("推流通知监听器.." + getString(R.string.restart_success));
         }
 
         @Override
         public void onFirstFramePreviewed(AlivcLivePusher pusher) {
-            showToast("推流通知监听器.."+getString(R.string.first_frame));
+            showToast("推流通知监听器.." + getString(R.string.first_frame));
         }
 
         @Override
         public void onDropFrame(AlivcLivePusher pusher, int countBef, int countAft) {
-            showToast("推流通知监听器.."+getString(R.string.drop_frame) + ", 丢帧前：" + countBef + ", 丢帧后：" + countAft);
+            showToast("推流通知监听器.." + getString(R.string.drop_frame) + ", 丢帧前：" + countBef + ", 丢帧后：" + countAft);
         }
 
         @Override
         public void onAdjustBitRate(AlivcLivePusher pusher, int curBr, int targetBr) {
-            showToast("推流通知监听器.."+getString(R.string.adjust_bitrate) + ", 当前码率：" + curBr + "Kps, 目标码率：" + targetBr + "Kps");
+            showToast("推流通知监听器.." + getString(R.string.adjust_bitrate) + ", 当前码率：" + curBr + "Kps, 目标码率：" + targetBr + "Kps");
         }
 
         @Override
         public void onAdjustFps(AlivcLivePusher pusher, int curFps, int targetFps) {
-            showToast("推流通知监听器.."+getString(R.string.adjust_fps) + ", 当前帧率：" + curFps + ", 目标帧率：" + targetFps);
+            showToast("推流通知监听器.." + getString(R.string.adjust_fps) + ", 当前帧率：" + curFps + ", 目标帧率：" + targetFps);
         }
     };
 

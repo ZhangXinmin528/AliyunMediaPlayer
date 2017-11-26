@@ -26,7 +26,7 @@ import com.alivc.live.pusher.AlivcLivePushInfoListener;
 import com.alivc.live.pusher.AlivcLivePushNetworkListener;
 import com.alivc.live.pusher.AlivcLivePusher;
 import com.example.aliyunlivedemo.R;
-import com.example.aliyunlivedemo.live.push.push_3_0.LivePushFlowActivity;
+import com.example.aliyunlivedemo.live.push.push_3_0.ali.AliLivePushFlowActivity;
 import com.example.aliyunlivedemo.util.LiveConfig;
 
 import static com.alivc.live.pusher.AlivcLivePushCameraTypeEnum.CAMERA_TYPE_BACK;
@@ -62,7 +62,6 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
     private ImageView mBeautyButton;
     private LinearLayout mTopBar;
     private TextView mIsPushing;
-    private LinearLayout mGuide;
 
     private Button mPreviewButton;
     private Button mPushButton;
@@ -70,7 +69,7 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
     private Button mRestartButton;
     private Handler mHandler;
 
-    private LivePushFlowActivity.PauseState mStateListener;
+    private AliLivePushFlowActivity.PauseState mStateListener;
 
     public static LivePushFragment newInstance(String url, boolean async,
                                                boolean mAudio, int cameraId,
@@ -442,7 +441,7 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
         this.mAlivcLivePusher = alivcLivePusher;
     }
 
-    public void setStateListener(LivePushFlowActivity.PauseState stateListener) {
+    public void setStateListener(AliLivePushFlowActivity.PauseState stateListener) {
         this.mStateListener = stateListener;
     }
 
@@ -450,7 +449,7 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
     public void onClick(View v) {
         if (mAlivcLivePusher == null) {
             if (getActivity() != null) {
-                mAlivcLivePusher = ((LivePushFlowActivity) getActivity()).getAlivcLivePusher();
+                mAlivcLivePusher = ((AliLivePushFlowActivity) getActivity()).getAlivcLivePusher();
             }
             if (mAlivcLivePusher == null) {
                 return;
@@ -504,7 +503,7 @@ public class LivePushFragment extends Fragment implements Runnable, View.OnClick
                 case R.id.preview_button:
                     final boolean isPreview = mPreviewButton.isSelected();
                     if (mSurfaceView == null && getActivity() != null) {
-                        mSurfaceView = ((LivePushFlowActivity) getActivity()).getSurfaceView();
+                        mSurfaceView = ((AliLivePushFlowActivity) getActivity()).getSurfaceView();
                     }
                     if (!isPreview) {
                         mAlivcLivePusher.stopPreview();

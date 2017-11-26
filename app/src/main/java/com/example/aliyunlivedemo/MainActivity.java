@@ -56,8 +56,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startPushFlowOld();
                 break;
             case R.id.btn_push_video_flow_v3_0://推流测试v3.0
-//                Intent pushIntent = new Intent(mContext, PushConfigActivity.class);
-//                startActivity(pushIntent);
+                /*Intent pushIntent = new Intent(mContext, AliPushConfigActivity.class);
+                startActivity(pushIntent);*/
                 startPushFlowNew();
                 break;
             case R.id.btn_pull_video_flow://拉流测试

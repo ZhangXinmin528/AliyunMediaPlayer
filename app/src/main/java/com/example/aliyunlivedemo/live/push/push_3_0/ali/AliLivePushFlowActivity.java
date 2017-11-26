@@ -1,15 +1,19 @@
-package com.example.aliyunlivedemo.live.push.push_3_0;
+package com.example.aliyunlivedemo.live.push.push_3_0.ali;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -19,78 +23,79 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import com.alivc.live.pusher.AlivcFpsEnum;
 import com.alivc.live.pusher.AlivcLivePushConfig;
 import com.alivc.live.pusher.AlivcLivePushStatsInfo;
 import com.alivc.live.pusher.AlivcLivePusher;
 import com.alivc.live.pusher.AlivcPreviewOrientationEnum;
-import com.alivc.live.pusher.AlivcResolutionEnum;
+import com.alivc.live.pusher.LogUtil;
 import com.alivc.live.pusher.SurfaceStatus;
 import com.example.aliyunlivedemo.R;
 import com.example.aliyunlivedemo.adapter.LivePushFragmentAdapter;
 import com.example.aliyunlivedemo.base.BaseActivity;
-import com.example.aliyunlivedemo.listener.LivePauseStateListener;
 import com.example.aliyunlivedemo.listener.SimpleOnGestureListener;
 import com.example.aliyunlivedemo.listener.SimpleOnScaleGestureListener;
 import com.example.aliyunlivedemo.live.push.push_3_0.fragment.LivePushFragment;
 import com.example.aliyunlivedemo.live.push.push_3_0.fragment.PushDiagramStatsFragment;
 import com.example.aliyunlivedemo.live.push.push_3_0.fragment.PushTextStatsFragment;
-import com.example.aliyunlivedemo.util.DialogUtils;
-import com.example.aliyunlivedemo.util.LiveConfig;
+import com.example.aliyunlivedemo.util.NetWorkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.alivc.live.pusher.AlivcLivePushConstants.DEFAULT_VALUE_INT_AUDIO_RETRY_COUNT;
-import static com.alivc.live.pusher.AlivcLivePushConstants.DEFAULT_VALUE_INT_RETRY_INTERVAL;
 import static com.alivc.live.pusher.AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_LEFT;
 import static com.alivc.live.pusher.AlivcPreviewOrientationEnum.ORIENTATION_LANDSCAPE_HOME_RIGHT;
 import static com.alivc.live.pusher.AlivcPreviewOrientationEnum.ORIENTATION_PORTRAIT;
 
 /**
- * Created by ZhangXinmin on 2017/11/22.
+ * Created by ZhangXinmin on 2017/11/21.
  * Copyright (c) 2017 . All rights reserved.
- * 封装播放页面
+ * 视频推流界面V3.0版本
  */
 
-public class LivePushFlowActivity2 extends BaseActivity {
-    private static final String TAG = LivePushFlowActivity2.class.getSimpleName();
+public class AliLivePushFlowActivity extends BaseActivity {
+    private static final String TAG = AliLivePushFlowActivity.class.getSimpleName();
 
     private static final int FLING_MIN_DISTANCE = 50;
+    private static final int FLING_MIN_VELOCITY = 0;
     private final long REFRESH_INTERVAL = 1000;
+    private static final String URL_KEY = "url_key";
+    private static final String ASYNC_KEY = "async_key";
+    private static final String AUDIO_ONLY_KEY = "audio_only_key";
+    private static final String ORIENTATION_KEY = "orientation_key";
+    private static final String CAMERA_ID = "camera_id";
+    private static final String FLASH_ON = "flash_on";
+    public static final int REQ_CODE_PUSH = 0x1112;
 
     private Context mContext;
+    //参数
+    private String mPushUrl = null;
+    private boolean mAsync = false;
+    private boolean mAudioOnly = false;
+    private int mOrientation = ORIENTATION_PORTRAIT.ordinal();
+    private int mCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
+    private boolean mFlash = false;
+
+    //控件
     private SurfaceView mSurfaceView;
     private SurfaceStatus mSurfaceStatus;
-
-    //直播控件
+    //直播
     private AlivcLivePusher mAlivcLivePusher;
     private AlivcLivePushConfig mAlivcLivePushConfig;
-
-    //直播参数
-    private String mRtmpUrl;//推流地址
-    private boolean mAsync;//是否异步
-    private boolean mAudioOnly;//是否纯音频
-    private int mOrientation;//屏幕方向
-    private int mCameraId;//摄像头
-    private boolean mFlashOn;//是否打开闪光灯
-
-    //直播蒙版界面
-    private ViewPager mViewPager;
-    private List<Fragment> mFragmentList;
-    private LivePushFragmentAdapter mFragmentAdapter;
     private LivePushFragment mLivePushFragment;
     private PushTextStatsFragment mPushTextStatsFragment;
     private PushDiagramStatsFragment mPushDiagramStatsFragment;
-    private Handler mHandler;
+    //直播推流状态信息
+    private AlivcLivePushStatsInfo alivcLivePushStatsInfo;
+    private boolean isPause;
 
+    private ViewPager mViewPager;
+    private List<Fragment> mFragmentList;
+    private LivePushFragmentAdapter mLivePushFragmentAdapter;
     //手势监听
     private GestureDetector mGestureDetector;
     private ScaleGestureDetector mScaleDetector;
-    private LivePauseStateListener mPauseStateListener;
-    //直播推流状态
-    private boolean isPause;
-    private AlivcLivePushStatsInfo livePushStatsInfo;
+    private Handler mHandler;
+    private int mNetWorkState;//网络状态
 
     @Override
     protected Object setLayout() {
@@ -100,53 +105,31 @@ public class LivePushFlowActivity2 extends BaseActivity {
     @Override
     protected void initParamsAndValues() {
         mContext = this;
-        mSurfaceStatus = SurfaceStatus.UNINITED;
         mHandler = new Handler();
-        //init params
+        //获取参数
         Intent intent = getIntent();
         if (intent != null) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                if (bundle.containsKey(LiveConfig.LIVE_URL.name())) {
-                    mRtmpUrl = bundle.getString(LiveConfig.LIVE_URL.name());
-                }
-                if (bundle.containsKey(LiveConfig.IS_ANSYC.name())) {
-                    mAsync = bundle.getBoolean(LiveConfig.IS_ANSYC.name(), false);//不开启异步
-                }
-                if (bundle.containsKey(LiveConfig.IS_AUDIO_ONLY.name())) {
-                    mAudioOnly = bundle.getBoolean(LiveConfig.IS_AUDIO_ONLY.name(), false);//默认非纯音频
-                }
-                if (bundle.containsKey(LiveConfig.SCREEN_ORIENTATION.name())) {
-                    mOrientation = bundle.getInt(LiveConfig.SCREEN_ORIENTATION.name(), 0);//默认竖屏
-                }
-                if (bundle.containsKey(LiveConfig.CAMERA_ID.name())) {
-                    mCameraId = bundle.getInt(LiveConfig.CAMERA_ID.name(), 1);//默认前置摄像头
-                }
-                if (bundle.containsKey(LiveConfig.IS_FLASH_ON.name())) {
-                    mFlashOn = bundle.getBoolean(LiveConfig.IS_FLASH_ON.name(), false);//默认关闭闪光灯
-                }
-            }
+            mPushUrl = intent.getStringExtra(URL_KEY);
+            mAsync = intent.getBooleanExtra(ASYNC_KEY, false);
+            mAudioOnly = intent.getBooleanExtra(AUDIO_ONLY_KEY, false);
+            mOrientation = intent.getIntExtra(ORIENTATION_KEY, ORIENTATION_PORTRAIT.ordinal());
+            mCameraId = intent.getIntExtra(CAMERA_ID, Camera.CameraInfo.CAMERA_FACING_FRONT);
+            mFlash = intent.getBooleanExtra(FLASH_ON, false);
+            mAlivcLivePushConfig = (AlivcLivePushConfig) intent.getSerializableExtra(AlivcLivePushConfig.Config);
         }
 
+        mSurfaceStatus = SurfaceStatus.UNINITED;
         //设置横竖屏
         setOrientation(mOrientation);
-        //配置直播参数
-        initLiveConfigures();
         //初始化直播推流对象
         initLivePusher();
 
         //init live fragment
         mFragmentList = new ArrayList<>();
-        mFragmentAdapter = new LivePushFragmentAdapter(getSupportFragmentManager(), mFragmentList);
-        mLivePushFragment = LivePushFragment.newInstance(mRtmpUrl, mAsync, mAudioOnly, mCameraId, mFlashOn);
+        mLivePushFragment = LivePushFragment.newInstance(mPushUrl, mAsync, mAudioOnly, mCameraId, mFlash);
         mLivePushFragment.setAlivcLivePusher(mAlivcLivePusher);
-        /*mLivePushFragment.setStateListener(new LivePauseStateListener() {
-            @Override
-            public void onPause(boolean state) {
-                isPause = state;
-            }
-        });
-*/
+        mLivePushFragment.setStateListener(mStateListener);
+
         //日志信息
         mPushTextStatsFragment = new PushTextStatsFragment();
         mPushDiagramStatsFragment = new PushDiagramStatsFragment();
@@ -154,51 +137,6 @@ public class LivePushFlowActivity2 extends BaseActivity {
         //添加手势
         mGestureDetector = new GestureDetector(mContext, mGestureListener);
         mScaleDetector = new ScaleGestureDetector(mContext, mScaleGestureListener);
-    }
-
-    /**
-     * 直播参数配置
-     *
-     * @hide
-     */
-    private void initLiveConfigures() {
-        //直播配置
-        mAlivcLivePushConfig = new AlivcLivePushConfig();
-        //设置分辨率
-        mAlivcLivePushConfig.setResolution(AlivcResolutionEnum.RESOLUTION_540P);
-        //设置初始码率
-        mAlivcLivePushConfig.setInitialVideoBitrate(800);
-        //设置目标码率
-        mAlivcLivePushConfig.setTargetVideoBitrate(800);
-        //设置最小码率
-        mAlivcLivePushConfig.setMinVideoBitrate(400);
-        //设置采集帧率：
-        mAlivcLivePushConfig.setFps(AlivcFpsEnum.FPS_25);
-        //设置解码方式：硬解
-//        mAlivcLivePushConfig.setVideoEncodeMode(AlivcEncodeModeEnum.Encode_MODE_HARD);
-        //设置重连次数:5次
-        mAlivcLivePushConfig.setConnectRetryCount(DEFAULT_VALUE_INT_AUDIO_RETRY_COUNT);
-        //重连时长:1000ms
-        mAlivcLivePushConfig.setConnectRetryInterval(DEFAULT_VALUE_INT_RETRY_INTERVAL);
-        //美颜开关
-        mAlivcLivePushConfig.setBeautyOn(true);
-        //设置美颜参数
-        mAlivcLivePushConfig.setBeautyBrightness(60); //亮度60
-        mAlivcLivePushConfig.setBeautyRuddy(40); //红润 40
-        mAlivcLivePushConfig.setBeautyBuffing(50); //磨皮 50
-        mAlivcLivePushConfig.setBeautyWhite(20); //美白 20
-        mAlivcLivePushConfig.setBeautySaturation(10); //饱和度 10
-    }
-
-    @Override
-    protected void initViews() {
-        super.initViews();
-
-        mSurfaceView = findViewById(R.id.surfaceview_live_push_new);
-        mSurfaceView.getHolder().addCallback(mSurfaceCallback);
-
-        //init viewpager
-        initViewPager();
     }
 
     /**
@@ -213,12 +151,64 @@ public class LivePushFlowActivity2 extends BaseActivity {
                 mAlivcLivePusher.init(mContext, mAlivcLivePushConfig);
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
-                DialogUtils.showErrorDialog(mContext, e.getMessage());
+                showDialog(mContext, e.getMessage());
             } catch (IllegalStateException e) {
                 e.printStackTrace();
-                DialogUtils.showErrorDialog(mContext, e.getMessage());
+                showDialog(mContext, e.getMessage());
             }
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    protected void initViews() {
+        super.initViews();
+        mSurfaceView = findViewById(R.id.surfaceview_live_push_new);
+        mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                Log.e(TAG, "surfaceCreated");
+                if (mSurfaceStatus == SurfaceStatus.UNINITED) {
+                    mSurfaceStatus = SurfaceStatus.CREATED;
+                    if (mAlivcLivePusher != null) {
+                        try {
+                            if (mAsync) {
+                                mAlivcLivePusher.startPreviewAysnc(mSurfaceView);
+                            } else {
+                                mAlivcLivePusher.startPreview(mSurfaceView);
+                            }
+                        } catch (IllegalArgumentException e) {
+                            e.toString();
+                        } catch (IllegalStateException e) {
+                            e.toString();
+                        }
+                    }
+                } else if (mSurfaceStatus == SurfaceStatus.DESTROYED) {
+                    mSurfaceStatus = SurfaceStatus.RECREATED;
+                }
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+                Log.e(TAG, "surfaceChanged");
+                mSurfaceStatus = SurfaceStatus.CHANGED;
+                if (mLivePushFragment != null) {
+                    mLivePushFragment.setSurfaceView(mSurfaceView);
+                }
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                Log.e(TAG, "surfaceDestroyed");
+                mSurfaceStatus = SurfaceStatus.DESTROYED;
+            }
+        });
+
+        //init viewpager
+        initViewPager();
+
+        //网络状态
+        mNetWorkState = NetWorkUtils.getAPNType(mContext);
     }
 
     /**
@@ -231,7 +221,8 @@ public class LivePushFlowActivity2 extends BaseActivity {
         mFragmentList.add(mPushTextStatsFragment);
         mFragmentList.add(mLivePushFragment);
         mFragmentList.add(mPushDiagramStatsFragment);
-        mViewPager.setAdapter(mFragmentAdapter);
+        mLivePushFragmentAdapter = new LivePushFragmentAdapter(getSupportFragmentManager(), mFragmentList);
+        mViewPager.setAdapter(mLivePushFragmentAdapter);
         mViewPager.setCurrentItem(1);//指定显示页面
         //添加手势监听，进行传递
         mViewPager.setOnTouchListener(new View.OnTouchListener() {
@@ -276,48 +267,6 @@ public class LivePushFlowActivity2 extends BaseActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
         }
     }
-
-    //回调
-    private SurfaceHolder.Callback mSurfaceCallback = new SurfaceHolder.Callback() {
-        @Override
-        public void surfaceCreated(SurfaceHolder surfaceHolder) {
-            Log.i(TAG, "surfaceCreated");
-            if (mSurfaceStatus == SurfaceStatus.UNINITED) {
-                mSurfaceStatus = SurfaceStatus.CREATED;
-                if (mAlivcLivePusher != null) {
-                    try {
-                        if (mAsync) {
-                            mAlivcLivePusher.startPreviewAysnc(mSurfaceView);
-                        } else {
-                            mAlivcLivePusher.startPreview(mSurfaceView);
-                        }
-                    } catch (IllegalArgumentException e) {
-                        e.toString();
-                    } catch (IllegalStateException e) {
-                        e.toString();
-                    }
-                }
-            } else if (mSurfaceStatus == SurfaceStatus.DESTROYED) {
-                mSurfaceStatus = SurfaceStatus.RECREATED;
-            }
-        }
-
-        @Override
-        public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-            Log.i(TAG, "surfaceChanged");
-            mSurfaceStatus = SurfaceStatus.CHANGED;
-            if (mLivePushFragment != null) {
-                mLivePushFragment.setSurfaceView(mSurfaceView);
-            }
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-            Log.i(TAG, "surfaceDestroyed");
-            mSurfaceStatus = SurfaceStatus.DESTROYED;
-        }
-    };
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -394,35 +343,62 @@ public class LivePushFlowActivity2 extends BaseActivity {
             mHandler.removeCallbacks(mRunnable);
             mHandler = null;
         }
+//        unregisterReceiver(mChangedReceiver);
         mFragmentList = null;
         mSurfaceView = null;
         mViewPager = null;
-        mFragmentAdapter = null;
+        mLivePushFragmentAdapter = null;
         mGestureDetector = null;
         mScaleDetector = null;
         mLivePushFragment = null;
         mPushTextStatsFragment = null;
         mPushDiagramStatsFragment = null;
         mAlivcLivePushConfig = null;
+
         mAlivcLivePusher = null;
-        livePushStatsInfo = null;
+
+        alivcLivePushStatsInfo = null;
         super.onDestroy();
     }
+
+    public SurfaceView getSurfaceView() {
+        return mSurfaceView;
+    }
+
+    public AlivcLivePusher getAlivcLivePusher() {
+        return mAlivcLivePusher;
+    }
+
+    //=====================================1.监听器===================================================
+    public interface PauseState {
+        void updatePause(boolean state);
+    }
+
+    private PauseState mStateListener = new PauseState() {
+        @Override
+        public void updatePause(boolean state) {
+            isPause = state;
+        }
+    };
+
+    //==============================================================================================
 
     //=====================================2.推流日志信息==================================================
     private Runnable mRunnable = new Runnable() {
         @SuppressLint("StaticFieldLeak")
         @Override
         public void run() {
+            LogUtil.d(TAG, "====== 日志信息..mRunnable run ======");
+
             new AsyncTask<AlivcLivePushStatsInfo, Void, AlivcLivePushStatsInfo>() {
                 @Override
                 protected AlivcLivePushStatsInfo doInBackground(AlivcLivePushStatsInfo... alivcLivePushStatsInfos) {
                     try {
-                        livePushStatsInfo = mAlivcLivePusher.getLivePushStatsInfo();
+                        alivcLivePushStatsInfo = mAlivcLivePusher.getLivePushStatsInfo();
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }
-                    return livePushStatsInfo;
+                    return alivcLivePushStatsInfo;
                 }
 
                 @Override
@@ -463,10 +439,10 @@ public class LivePushFlowActivity2 extends BaseActivity {
                 return false;
             }
             if (motionEvent.getX() - motionEvent1.getX() > FLING_MIN_DISTANCE
-                    && Math.abs(v) > 0) {
+                    && Math.abs(v) > FLING_MIN_VELOCITY) {
                 // Fling left
             } else if (motionEvent1.getX() - motionEvent.getX() > FLING_MIN_DISTANCE
-                    && Math.abs(v) > 0) {
+                    && Math.abs(v) > FLING_MIN_VELOCITY) {
                 // Fling right
             }
             return false;
@@ -502,4 +478,35 @@ public class LivePushFlowActivity2 extends BaseActivity {
 
     //==============================================================================================
 
+    //=====================================4.提示性方法================================================
+    private void showDialog(Context context, String message) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle(getString(R.string.dialog_title));
+        dialog.setMessage(message);
+        dialog.setNegativeButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        dialog.show();
+    }
+
+    //==============================================================================================
+    public static void startActivity(Activity activity, AlivcLivePushConfig alivcLivePushConfig,
+                                     String url, boolean async,
+                                     boolean audioOnly, AlivcPreviewOrientationEnum orientation,
+                                     int cameraId, boolean isFlash) {
+        Intent intent = new Intent(activity, AliLivePushFlowActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(AlivcLivePushConfig.Config, alivcLivePushConfig);
+        bundle.putString(URL_KEY, url);
+        bundle.putBoolean(ASYNC_KEY, async);
+        bundle.putBoolean(AUDIO_ONLY_KEY, audioOnly);
+        bundle.putInt(ORIENTATION_KEY, orientation.ordinal());
+        bundle.putInt(CAMERA_ID, cameraId);
+        bundle.putBoolean(FLASH_ON, isFlash);
+        intent.putExtras(bundle);
+        activity.startActivityForResult(intent, REQ_CODE_PUSH);
+    }
 }

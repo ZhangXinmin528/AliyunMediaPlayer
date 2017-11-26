@@ -100,7 +100,7 @@ public final class PushConfigBuilder {
      * @return
      */
     public Intent createIntent(@Nullable Context context) {
-        Intent intent = new Intent(context, LivePushFlowActivity2.class);
+        Intent intent = new Intent(context, LivePushFlowActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(LiveConfig.LIVE_URL.name(), rtmpUrl);//推流地址
         bundle.putBoolean(LiveConfig.IS_ANSYC.name(), isAsync);//异步

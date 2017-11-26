@@ -46,13 +46,13 @@
         <!--直播：推流v3.0-->
         <!--配置页面-->
         <activity
-            android:name=".live.push.push_3_0.PushConfigActivity"
+            android:name=".live.push.push_3_0.ali.AliPushConfigActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <!--直播推流界面-->
         <activity
-            android:name=".live.push.push_3_0.LivePushFlowActivity2"
+            android:name=".live.push.push_3_0.LivePushFlowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

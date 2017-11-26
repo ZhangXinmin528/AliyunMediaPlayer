@@ -23,13 +23,12 @@ android {
         }
 
     }
-
     repositories {
         flatDir {
             dirs 'libs'
         }
     }
-
+    buildToolsVersion '27.0.0'
 }
 
 dependencies {

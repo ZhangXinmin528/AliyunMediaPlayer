@@ -1,4 +1,4 @@
-package com.example.aliyunlivedemo.live.push.push_3_0;
+package com.example.aliyunlivedemo.live.push.push_3_0.ali;
 
 import android.Manifest;
 import android.content.Context;
@@ -36,6 +36,10 @@ import com.alivc.live.pusher.AlivcPreviewOrientationEnum;
 import com.alivc.live.pusher.AlivcResolutionEnum;
 import com.alivc.live.pusher.WaterMarkInfo;
 import com.example.aliyunlivedemo.R;
+import com.example.aliyunlivedemo.live.push.push_3_0.Common;
+import com.example.aliyunlivedemo.live.push.push_3_0.LogcatHelper;
+import com.example.aliyunlivedemo.live.push.push_3_0.PushWaterMarkDialog;
+import com.example.aliyunlivedemo.live.push.push_3_0.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 
@@ -58,10 +62,9 @@ import static com.alivc.live.pusher.AlivcVideoEncodeGopEnum.GOP_FOUR;
 import static com.alivc.live.pusher.AlivcVideoEncodeGopEnum.GOP_ONE;
 import static com.alivc.live.pusher.AlivcVideoEncodeGopEnum.GOP_THREE;
 import static com.alivc.live.pusher.AlivcVideoEncodeGopEnum.GOP_TWO;
-import static com.example.aliyunlivedemo.live.push.push_3_0.LivePushFlowActivity.REQ_CODE_PUSH;
 
-public class PushConfigActivity extends AppCompatActivity {
-    private static final String TAG = "PushConfigActivity";
+public class AliPushConfigActivity extends AppCompatActivity {
+    private static final String TAG = "AliPushConfigActivity";
 
     private AlivcResolutionEnum mDefinition = AlivcResolutionEnum.RESOLUTION_540P;
     private static final int REQ_CODE_PERMISSION = 0x1111;
@@ -243,15 +246,15 @@ public class PushConfigActivity extends AppCompatActivity {
             switch (id) {
                 case R.id.beginPublish:
                     if (getPushConfig() != null) {
-                        LivePushFlowActivity.startActivity(PushConfigActivity.this,
+                        AliLivePushFlowActivity.startActivity(AliPushConfigActivity.this,
                                 mAlivcLivePushConfig, mUrl.getText().toString(), mAsyncValue,
                                 mAudioOnlyPush, mOrientationEnum, mCameraId, isFlash);
                     }
                     break;
                 case R.id.qr_code:
-                    if (ContextCompat.checkSelfPermission(PushConfigActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(AliPushConfigActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         // Do not have the permission of camera, request it.
-                        ActivityCompat.requestPermissions(PushConfigActivity.this, new String[]{Manifest.permission.CAMERA}, REQ_CODE_PERMISSION);
+                        ActivityCompat.requestPermissions(AliPushConfigActivity.this, new String[]{Manifest.permission.CAMERA}, REQ_CODE_PERMISSION);
                     } else {
                         // Have gotten the permission
                         startCaptureActivityForResult();
@@ -604,7 +607,7 @@ public class PushConfigActivity extends AppCompatActivity {
     }
 
     private void startCaptureActivityForResult() {
-        Intent intent = new Intent(PushConfigActivity.this, CaptureActivity.class);
+        Intent intent = new Intent(AliPushConfigActivity.this, CaptureActivity.class);
         Bundle bundle = new Bundle();
         bundle.putBoolean(CaptureActivity.KEY_NEED_BEEP, CaptureActivity.VALUE_BEEP);
         bundle.putBoolean(CaptureActivity.KEY_NEED_VIBRATION, CaptureActivity.VALUE_VIBRATION);
@@ -715,7 +718,7 @@ public class PushConfigActivity extends AppCompatActivity {
                         break;
                 }
                 break;
-            case REQ_CODE_PUSH: {
+            case AliLivePushFlowActivity.REQ_CODE_PUSH: {
                 if (mWaterLinear != null && mWaterMark.isChecked()) {
                     mWaterLinear.setVisibility(View.GONE);
                 }

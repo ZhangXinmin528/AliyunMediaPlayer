@@ -165,7 +165,7 @@ public class LivePushFlowActivity extends BaseActivity {
         //直播配置
         mAlivcLivePushConfig = new AlivcLivePushConfig();
         //设置分辨率
-        mAlivcLivePushConfig.setResolution(AlivcResolutionEnum.RESOLUTION_540P);
+        mAlivcLivePushConfig.setResolution(AlivcResolutionEnum.RESOLUTION_720P);
         //设置初始码率
         mAlivcLivePushConfig.setInitialVideoBitrate(800);
         //设置目标码率

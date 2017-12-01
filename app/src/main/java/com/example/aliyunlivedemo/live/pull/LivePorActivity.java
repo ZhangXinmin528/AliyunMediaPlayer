@@ -85,7 +85,6 @@ public class LivePorActivity extends BaseActivity {
             }
         });
 
-
         //初始化player
         initMediaPlayer();
 

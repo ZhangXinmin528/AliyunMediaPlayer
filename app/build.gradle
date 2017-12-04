@@ -36,15 +36,18 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation 'com.android.support:appcompat-v7:27.0.1'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.android.support:design:27.0.1'
+    implementation 'com.android.support:design:27.0.2'
     //阿里播放器
-    compile(name: 'AliyunPlayer', ext: 'aar')
+    compile(name: 'AlivcPlayer', ext: 'aar')
     //日志
     implementation 'com.orhanobut:logger:2.1.1'
     //阿里推流SDK_v3.0
     implementation files('libs/live-pusher-3.0.0.jar')
     //扫描二维码
     implementation 'com.acker:simplezxing:1.5'
+    //内存检测
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 }

@@ -22,7 +22,6 @@ import com.example.aliyunlivedemo.R;
 import com.example.aliyunlivedemo.base.BaseActivity;
 import com.example.aliyunlivedemo.listener.SimpleOnSeekBarChangeListener;
 import com.example.aliyunlivedemo.util.Formatter;
-import com.orhanobut.logger.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -253,6 +252,12 @@ public class VodActivity extends BaseActivity implements OnClickListener {
 
     }
 
+    @Override
+    protected void onStart() {
+        startPlayVideo();
+        super.onStart();
+    }
+
     /**
      * init player
      *
@@ -277,8 +282,8 @@ public class VodActivity extends BaseActivity implements OnClickListener {
             @Override
             public void onPrepared() {
                 Log.e(TAG, "MediaPlayerPreparedListener..onPrepared");
-                Logger.d(TAG, "视频宽度：" + mAliVcMediaPlayer.getVideoWidth() +
-                        "..视频高度：" + mAliVcMediaPlayer.getVideoHeight());
+//                Logger.d(TAG, "视频宽度：" + mAliVcMediaPlayer.getVideoWidth() +
+//                        "..视频高度：" + mAliVcMediaPlayer.getVideoHeight());
                 showVideoProgressInfo();
             }
         });
@@ -358,7 +363,7 @@ public class VodActivity extends BaseActivity implements OnClickListener {
         });
 
         //暂停播放监听接口
-        mAliVcMediaPlayer.setStopedListener(new MediaPlayer.MediaPlayerStopedListener() {
+        mAliVcMediaPlayer.setStoppedListener(new MediaPlayer.MediaPlayerStoppedListener() {
             @Override
             public void onStopped() {
                 Log.e(TAG, "MediaPlayerStopedListener..视频暂停播放");
@@ -374,7 +379,7 @@ public class VodActivity extends BaseActivity implements OnClickListener {
         });
 
         //打开底层开发，开发时使用
-//        mAliVcMediaPlayer.enableNativeLog();
+        mAliVcMediaPlayer.enableNativeLog();
 
     }
 
@@ -483,9 +488,6 @@ public class VodActivity extends BaseActivity implements OnClickListener {
             mDurationTv.setText(Formatter.formatTime(duration));
             mPlayProgress.setMax(duration);
             mPlayProgress.setProgress(currentProgress);
-            Log.e(TAG, "currentProgress:" + currentProgress +
-                    "..bufferProgress:" + bufferProgress +
-                    "..duration:" + duration);
             if (bufferProgress != 0) {
                 mPlayProgress.setSecondaryProgress(bufferProgress);
             }

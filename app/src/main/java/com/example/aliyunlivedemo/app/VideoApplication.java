@@ -5,9 +5,10 @@ import android.app.Application;
 import com.alivc.player.AliVcMediaPlayer;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 /**
- *
  * @author ZhangXinmin
  * @date 2017/11/10
  * Copyright (c) 2017 . All rights reserved.
@@ -30,5 +31,14 @@ public class VideoApplication extends Application {
 //        System.loadLibrary("qupai-media-thirdparty");
 //        System.loadLibrary("qupai-media-jni");
 //        ApplicationGlue.initialize(this);
+
+        setupLeakCanary();
+    }
+
+    private RefWatcher setupLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return RefWatcher.DISABLED;
+        }
+        return LeakCanary.install(this);
     }
 }

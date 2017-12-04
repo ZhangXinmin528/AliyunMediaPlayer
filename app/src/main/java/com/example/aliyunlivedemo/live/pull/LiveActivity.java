@@ -78,7 +78,7 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 Log.e(TAG, "SurfaceView..surfaceCreated");
-                holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
+//                holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
                 holder.setKeepScreenOn(true);
 
                 //前后台切换需要重新设置Surface;部分手机锁屏也会做前后台切换
@@ -286,7 +286,7 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
         });
 
         //暂停播放监听接口
-        mAliVcMediaPlayer.setStopedListener(new MediaPlayer.MediaPlayerStopedListener() {
+        mAliVcMediaPlayer.setStoppedListener(new MediaPlayer.MediaPlayerStoppedListener() {
             @Override
             public void onStopped() {
                 Log.e(TAG, "MediaPlayerStopedListener..视频暂停播放");
@@ -372,7 +372,7 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
     private void startPlayVideo() {
         if (mAliVcMediaPlayer != null) {
             if (!TextUtils.isEmpty(mPlayUrl)) {
-                mAliVcMediaPlayer.prepareAndPlay(mPlayUrl);
+                mAliVcMediaPlayer.prepareToPlay(mPlayUrl);
             }
         }
     }
@@ -404,6 +404,7 @@ public class LiveActivity extends BaseActivity implements View.OnClickListener {
      */
     private void destory() {
         if (mAliVcMediaPlayer != null) {
+            mAliVcMediaPlayer.releaseVideoSurface();
             mAliVcMediaPlayer.stop();
             mAliVcMediaPlayer.destroy();
         }

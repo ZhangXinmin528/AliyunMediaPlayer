@@ -179,7 +179,7 @@ public class LivePorActivity extends BaseActivity {
         });
 
         //暂停播放监听接口
-        mAliVcMediaPlayer.setStopedListener(new MediaPlayer.MediaPlayerStopedListener() {
+        mAliVcMediaPlayer.setStoppedListener(new MediaPlayer.MediaPlayerStoppedListener() {
             @Override
             public void onStopped() {
                 Log.e(TAG, "MediaPlayerStopedListener..视频暂停播放");

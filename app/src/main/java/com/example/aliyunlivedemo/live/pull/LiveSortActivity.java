@@ -71,7 +71,7 @@ public class LiveSortActivity extends BaseActivity implements View.OnClickListen
                 String dfws = "rtmp://v1.one-tv.com/live/mpegts.stream";
                 intent.putExtra(PARAMS_URL, dfws);
             case R.id.tv_pull_flow_test:
-                String bookReading = "http://djt-live.boguforum.com/hlHv/hcTest.m3u8";
+                String bookReading = "";
                 intent.putExtra(PARAMS_URL, bookReading);
                 break;
             case R.id.tv_lol:

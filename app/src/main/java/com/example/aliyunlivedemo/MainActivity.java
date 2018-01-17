@@ -28,7 +28,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initParamsAndValues() {
         mContext = this;
-        mRtmpUrl = "rtmp://video-center.alivecdn.com/hlHv/hcTest?vhost=djt-live.boguforum.com";
+        mRtmpUrl = "";
     }
 
     @Override
